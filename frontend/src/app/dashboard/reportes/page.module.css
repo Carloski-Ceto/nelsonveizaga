@@ -1,0 +1,220 @@
+.pageHeader {
+  margin-bottom: var(--space-5);
+}
+
+.title {
+  margin: 0 0 var(--space-2);
+  font-size: var(--text-2xl);
+  font-family: var(--font-heading);
+}
+
+.muted {
+  margin: 0;
+  color: var(--color-text-muted);
+}
+
+.toolbar {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-3);
+  align-items: end;
+  margin-bottom: var(--space-4);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.field label {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  font-weight: 700;
+}
+
+.field input {
+  width: 100%;
+  min-height: 44px;
+  padding: .62rem .75rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.btnPrimary,
+.btnGhost {
+  border-radius: var(--radius-md);
+  min-height: 44px;
+  padding: .58rem .9rem;
+  border: 1px solid transparent;
+  cursor: pointer;
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+.btnPrimary {
+  color: #fff;
+  background: var(--gradient-primary);
+  box-shadow: var(--shadow-purple);
+}
+
+.btnGhost {
+  background: transparent;
+  border-color: var(--color-border);
+}
+
+.btnPrimary:disabled,
+.btnGhost:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+}
+
+.err {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #991b1b;
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-4);
+  margin-bottom: var(--space-4);
+}
+
+.sectionCard {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  margin-top: var(--space-4);
+  overflow: hidden;
+}
+
+.sectionHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.sectionTitle {
+  margin: 0;
+  font-size: var(--text-xl);
+}
+
+.sectionBody {
+  padding: var(--space-2) var(--space-0) var(--space-0);
+}
+
+.summary {
+  padding: 0 var(--space-4) var(--space-2);
+  color: var(--color-text-muted);
+}
+
+.sectionFilters {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1fr 1fr;
+  gap: var(--space-2);
+  padding: 0 var(--space-4) var(--space-3);
+}
+
+.sectionFilters input,
+.sectionFilters select {
+  width: 100%;
+  min-height: 40px;
+  padding: .5rem .65rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.columnsBox {
+  margin: 0 var(--space-4) var(--space-3);
+}
+
+.columnsBox summary {
+  cursor: pointer;
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+.columnsGrid {
+  margin-top: var(--space-2);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.columnsGrid label {
+  display: inline-flex;
+  gap: .35rem;
+  align-items: center;
+  font-size: var(--text-sm);
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+}
+
+.tableWrap {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-sm);
+  min-width: 620px;
+}
+
+.table th,
+.table td {
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--color-border-light);
+  text-align: left;
+}
+
+.table th {
+  background: var(--color-primary-50);
+  color: var(--color-primary-800);
+  font-size: .78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .03em;
+}
+
+@media (max-width: 980px) {
+  .toolbar {
+    grid-template-columns: 1fr;
+  }
+
+  .sectionHead {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .sectionFilters {
+    grid-template-columns: 1fr;
+  }
+
+  .actions {
+    width: 100%;
+  }
+
+  .actions .btnGhost,
+  .actions .btnPrimary {
+    flex: 1 1 auto;
+  }
+}

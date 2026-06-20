@@ -1,0 +1,135 @@
+/* ============================================
+   Oftalmología SI1 — Design Tokens
+   Clínica de Ojos Norte
+   Paleta: Violeta / Premium Oftalmología
+   ============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap');
+
+:root {
+  /* ---- Colores Primarios (Violeta) ---- */
+  --color-primary:         #7C3AED;
+  --color-primary-light:   #A78BFA;
+  --color-primary-lighter: #EDE9FE;
+  --color-primary-dark:    #5B21B6;
+  --color-primary-50:      #F5F3FF;
+  --color-primary-100:     #EDE9FE;
+  --color-primary-200:     #DDD6FE;
+  --color-primary-300:     #C4B5FD;
+  --color-primary-400:     #A78BFA;
+  --color-primary-500:     #8B5CF6;
+  --color-primary-600:     #7C3AED;
+  --color-primary-700:     #6D28D9;
+  --color-primary-800:     #5B21B6;
+  --color-primary-900:     #4C1D95;
+
+  /* Gradiente del hero */
+  --gradient-hero: linear-gradient(160deg, #1e1b4b 0%, #3b0764 40%, #6d28d9 80%, #7c3aed 100%);
+  --gradient-primary: linear-gradient(135deg, var(--color-primary-700) 0%, var(--color-primary-500) 100%);
+  --gradient-soft: linear-gradient(135deg, var(--color-primary-50) 0%, #f0ebff 100%);
+
+  /* ---- Colores Secundarios ---- */
+  --color-secondary:       #0EA5E9;
+  --color-secondary-light: #38BDF8;
+  --color-secondary-50:    #F0F9FF;
+
+  /* ---- Colores de Acento ---- */
+  --color-accent:       #F59E0B;
+  --color-accent-light: #FCD34D;
+
+  /* ---- Colores de Estado ---- */
+  --color-success:       #16A34A;
+  --color-success-light: #DCFCE7;
+  --color-warning:       #F59E0B;
+  --color-warning-light: #FEF3C7;
+  --color-error:         #DC2626;
+  --color-error-light:   #FEE2E2;
+  --color-info:          #2563EB;
+  --color-info-light:    #DBEAFE;
+
+  /* ---- Superficie / Fondo ---- */
+  --color-bg:             #FAFAFA;
+  --color-bg-alt:         #F5F3FF;
+  --color-surface:        #FFFFFF;
+  --color-surface-hover:  #F5F3FF;
+  --color-surface-active: #EDE9FE;
+
+  /* ---- Texto ---- */
+  --color-text:           #1E1B4B;
+  --color-text-secondary: #4B5563;
+  --color-text-muted:     #9CA3AF;
+  --color-text-inverse:   #FFFFFF;
+
+  /* ---- Bordes ---- */
+  --color-border:       #E5E7EB;
+  --color-border-light: #F3F4F6;
+  --color-border-focus: #7C3AED;
+
+  /* ---- Tipografía ---- */
+  --font-sans:    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --font-heading: 'Outfit', var(--font-sans);
+  --font-mono:    'JetBrains Mono', 'Fira Code', monospace;
+
+  --text-xs:   0.75rem;
+  --text-sm:   0.875rem;
+  --text-base: 1rem;
+  --text-lg:   1.125rem;
+  --text-xl:   1.25rem;
+  --text-2xl:  1.5rem;
+  --text-3xl:  1.875rem;
+  --text-4xl:  2.25rem;
+  --text-5xl:  3rem;
+
+  --leading-tight:   1.2;
+  --leading-normal:  1.5;
+  --leading-relaxed: 1.7;
+
+  /* ---- Espaciado ---- */
+  --space-1:  0.25rem;
+  --space-2:  0.5rem;
+  --space-3:  0.75rem;
+  --space-4:  1rem;
+  --space-5:  1.25rem;
+  --space-6:  1.5rem;
+  --space-8:  2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
+
+  /* ---- Bordes Redondeados ---- */
+  --radius-sm:   6px;
+  --radius-md:   10px;
+  --radius-lg:   16px;
+  --radius-xl:   24px;
+  --radius-2xl:  32px;
+  --radius-full: 9999px;
+
+  /* ---- Sombras ---- */
+  --shadow-xs:      0 1px 2px rgba(0,0,0,0.05);
+  --shadow-sm:      0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md:      0 4px 6px -1px rgba(0,0,0,0.08), 0 2px 4px -2px rgba(0,0,0,0.05);
+  --shadow-lg:      0 10px 15px -3px rgba(0,0,0,0.08), 0 4px 6px -4px rgba(0,0,0,0.04);
+  --shadow-xl:      0 20px 25px -5px rgba(0,0,0,0.08), 0 8px 10px -6px rgba(0,0,0,0.04);
+  --shadow-purple:  0 10px 30px rgba(124,58,237,0.2);
+  --shadow-purple-lg: 0 20px 50px rgba(124,58,237,0.25);
+
+  /* ---- Transiciones ---- */
+  --transition-fast: 150ms ease;
+  --transition-base: 250ms ease;
+  --transition-slow: 350ms ease;
+
+  /* ---- Layout ---- */
+  --sidebar-width:     260px;
+  --sidebar-collapsed: 72px;
+  --header-height:     72px;
+  --max-content-width: 1280px;
+
+  /* ---- Z-Index ---- */
+  --z-dropdown: 100;
+  --z-sticky:   200;
+  --z-sidebar:  300;
+  --z-modal:    400;
+  --z-toast:    500;
+}

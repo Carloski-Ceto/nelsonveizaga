@@ -1,0 +1,88 @@
+services:
+  # ---- PostgreSQL Database ----
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - oftalmologia_net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ---- Django Backend ----
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      AUTO_MIGRATE: ${AUTO_MIGRATE:-true}
+      AUTO_SEED: ${AUTO_SEED:-true}
+    volumes:
+      - ./backend:/app
+      - backend_static:/app/staticfiles
+      - backend_media:/app/media
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - oftalmologia_net
+    command: python manage.py runserver 0.0.0.0:8000
+
+  # ---- Next.js Frontend ----
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      # Variables de app se cargan desde env_file (.env).
+      NEXT_TELEMETRY_DISABLED: "1"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - /app/.next
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - oftalmologia_net
+    command: npm run dev
+
+  # ---- Mailhog (Captura de emails en desarrollo) ----
+  mailhog:
+    image: mailhog/mailhog:latest
+    restart: unless-stopped
+    ports:
+      - "1025:1025"   # SMTP — Django envía correos aquí
+      - "8025:8025"   # Web UI — ver emails en http://localhost:8025
+    networks:
+      - oftalmologia_net
+
+volumes:
+  postgres_data:
+  backend_static:
+  backend_media:
+
+networks:
+  oftalmologia_net:
+    driver: bridge

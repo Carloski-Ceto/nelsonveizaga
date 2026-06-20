@@ -1,0 +1,49 @@
+/* =====================================================
+   Dashboard Layout — Oftalmología SI1
+   ===================================================== */
+
+.wrapper {
+  display: flex;
+  min-height: 100vh;
+  background: var(--color-bg);
+}
+
+/* ── Área principal (a la derecha del sidebar) ── */
+.main {
+  flex: 1;
+  min-width: 0;
+  margin-left: var(--sidebar-width);     /* 260px */
+  display: flex;
+  flex-direction: column;
+  transition: margin-left 260ms cubic-bezier(0.4,0,0.2,1);
+}
+
+.main.sidebarCollapsed {
+  margin-left: var(--sidebar-collapsed); /* 72px */
+}
+
+/* ── Contenido de la página ── */
+.content {
+  flex: 1;
+  padding: var(--space-6) var(--space-8);
+  overflow-y: auto;
+  background: linear-gradient(
+    165deg,
+    var(--color-bg) 0%,
+    var(--color-primary-50) 18%,
+    var(--color-bg) 42%,
+    #fafafa 100%
+  );
+  background-attachment: fixed;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .main {
+    margin-left: 0 !important;
+  }
+
+  .content {
+    padding: var(--space-4);
+  }
+}

@@ -1,0 +1,523 @@
+/* =====================================================
+   Bitácora del Sistema — Oftalmología SI1
+   ===================================================== */
+
+/* ── Animaciones ── */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+/* ── Header ── */
+.pageHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+  animation: fadeInUp 0.4s ease both;
+}
+
+.headerLeft {}
+
+.pageTitleRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-1);
+}
+
+.pageTitle {
+  font-family: var(--font-heading);
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0;
+  letter-spacing: -0.3px;
+}
+
+.pageSubtitle {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+/* ── Reloj Bolivia ── */
+.clockBox {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-lg);
+  padding: var(--space-3) var(--space-4);
+  box-shadow: var(--shadow-sm);
+  min-width: 180px;
+}
+
+.clockLabel {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.clockDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-success);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
+.clockTime {
+  font-family: 'Courier New', monospace;
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--color-primary);
+  letter-spacing: 0.04em;
+  line-height: 1;
+}
+
+.clockDate {
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+}
+
+/* ── Stats KPI ── */
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-4);
+  margin-bottom: var(--space-5);
+  animation: fadeInUp 0.4s ease 0.05s both;
+}
+
+.statCard {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4) var(--space-5);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.statCard:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.statIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.statBody {}
+
+.statValue {
+  font-family: var(--font-heading);
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  color: var(--color-text);
+  line-height: 1;
+  margin: 0;
+}
+
+.statLabel {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  margin: 2px 0 0;
+}
+
+/* ── Panel principal ── */
+.panel {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  animation: fadeInUp 0.4s ease 0.10s both;
+}
+
+/* ── Toolbar de filtros ── */
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  padding: var(--space-4) var(--space-5);
+  border-bottom: 1px solid var(--color-border-light);
+  background: var(--color-bg);
+}
+
+.searchWrap {
+  position: relative;
+  flex: 1;
+  min-width: 200px;
+}
+
+.searchIcon {
+  position: absolute;
+  left: var(--space-3);
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-text-muted);
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+}
+
+.searchInput {
+  width: 100%;
+  height: 38px;
+  padding: 0 var(--space-3) 0 var(--space-9);
+  font-size: var(--text-sm);
+  font-family: var(--font-sans);
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
+  outline: none;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.searchInput::placeholder { color: var(--color-text-muted); }
+.searchInput:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(124,58,237,0.10);
+}
+
+.filterSelect {
+  height: 38px;
+  padding: 0 var(--space-3);
+  font-size: var(--text-sm);
+  font-family: var(--font-sans);
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
+  outline: none;
+  cursor: pointer;
+  transition: border-color var(--transition-fast);
+  min-width: 140px;
+}
+
+.filterSelect:focus { border-color: var(--color-primary); }
+
+.clearBtn {
+  height: 38px;
+  padding: 0 var(--space-4);
+  font-size: var(--text-sm);
+  font-family: var(--font-sans);
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  background: var(--color-surface);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: color var(--transition-fast), border-color var(--transition-fast), background var(--transition-fast);
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.clearBtn:hover {
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+  background: var(--color-primary-50);
+}
+
+.resultCount {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  white-space: nowrap;
+  margin-left: auto;
+}
+
+/* ── Tabla ── */
+.tableWrap {
+  overflow-x: auto;
+  min-height: 200px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-sm);
+}
+
+.table thead th {
+  padding: var(--space-3) var(--space-4);
+  text-align: left;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+  background: var(--color-bg);
+  border-bottom: 1px solid var(--color-border-light);
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  transition: color var(--transition-fast);
+}
+
+.table thead th:hover { color: var(--color-primary); }
+
+.sortIcon {
+  display: inline-flex;
+  vertical-align: middle;
+  margin-left: 4px;
+  opacity: 0.4;
+}
+
+.sortIcon.active { opacity: 1; color: var(--color-primary); }
+
+.table tbody tr {
+  transition: background var(--transition-fast);
+}
+
+.table tbody tr:hover { background: var(--color-surface-hover); }
+.table tbody tr + tr   { border-top: 1px solid var(--color-border-light); }
+
+.table td {
+  padding: var(--space-3) var(--space-4);
+  color: var(--color-text-secondary);
+  vertical-align: middle;
+}
+
+/* Celda de timestamp */
+.tdTimestamp {
+  white-space: nowrap;
+  font-family: 'Courier New', monospace;
+  font-size: var(--text-xs);
+}
+
+.tsDate {
+  color: var(--color-text);
+  font-weight: 600;
+  display: block;
+}
+
+.tsTime {
+  color: var(--color-primary);
+  display: block;
+}
+
+.tsRelative {
+  color: var(--color-text-muted);
+  font-family: var(--font-sans);
+  font-size: 10px;
+  display: block;
+  margin-top: 1px;
+}
+
+/* Celda de usuario */
+.userCell {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.userAvatar {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-full);
+  background: var(--gradient-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.userName  { font-weight: 500; color: var(--color-text); display: block; white-space: nowrap; }
+.userRole  { font-size: var(--text-xs); color: var(--color-text-muted); display: block; }
+
+/* Celda de módulo */
+.moduloCell {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.moduloName   { font-weight: 500; color: var(--color-text); white-space: nowrap; }
+.tablaName    { font-size: var(--text-xs); color: var(--color-text-muted); white-space: nowrap; }
+
+/* Descripción */
+.descCell {
+  max-width: 260px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--color-text-secondary);
+}
+
+/* IP */
+.ipCell {
+  font-family: 'Courier New', monospace;
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+/* ── Badges de acción ── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.badgeLOGIN         { color: #16A34A; background: #DCFCE7; }
+.badgeLOGOUT        { color: #6B7280; background: #F3F4F6; }
+.badgeLOGIN_FALLIDO { color: #DC2626; background: #FEE2E2; }
+.badgeCREAR         { color: #2563EB; background: #DBEAFE; }
+.badgeEDITAR        { color: #D97706; background: #FEF3C7; }
+.badgeELIMINAR      { color: #DC2626; background: #FEE2E2; }
+.badgeCAMBIAR_PASSWORD    { color: #7C3AED; background: #EDE9FE; }
+.badgeRECUPERAR_PASSWORD  { color: #7C3AED; background: #EDE9FE; }
+.badgeREPROGRAMAR   { color: #EA580C; background: #FFEDD5; }
+.badgeCANCELAR      { color: #DC2626; background: #FEE2E2; }
+.badgeCONFIRMAR     { color: #16A34A; background: #DCFCE7; }
+
+/* ── Paginación ── */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-5);
+  border-top: 1px solid var(--color-border-light);
+  background: var(--color-bg);
+}
+
+.pageInfo {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+.pageButtons {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.pageBtn {
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  font-size: var(--text-sm);
+  font-family: var(--font-sans);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.pageBtn:hover:not(:disabled) {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  background: var(--color-primary-50);
+}
+
+.pageBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.pageBtn.active {
+  background: var(--gradient-primary);
+  border-color: transparent;
+  color: #fff;
+  box-shadow: var(--shadow-purple);
+}
+
+/* ── Empty state ── */
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-16) var(--space-8);
+  gap: var(--space-3);
+  color: var(--color-text-muted);
+}
+
+.emptyIcon {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-full);
+  background: var(--color-bg-alt);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-muted);
+}
+
+.emptyTitle { font-weight: 600; color: var(--color-text-secondary); margin: 0; }
+.emptyText  { font-size: var(--text-sm); margin: 0; }
+
+/* ── Responsive ── */
+@media (max-width: 1024px) {
+  .statsGrid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .pageHeader { flex-direction: column; }
+  .clockBox   { align-self: flex-start; align-items: flex-start; min-width: unset; width: 100%; }
+  .statsGrid  { grid-template-columns: repeat(2, 1fr); gap: var(--space-3); }
+
+  /* Ocultar columnas menos críticas */
+  .table th:nth-child(3),
+  .table td:nth-child(3) { display: none; } /* Tabla afectada */
+  .table th:nth-child(6),
+  .table td:nth-child(6) { display: none; } /* IP */
+}
+
+@media (max-width: 480px) {
+  .statsGrid { grid-template-columns: repeat(2, 1fr); gap: var(--space-2); }
+  .statCard  { padding: var(--space-3); }
+  .statValue { font-size: var(--text-xl); }
+
+  .toolbar   { flex-direction: column; align-items: stretch; }
+  .searchWrap{ min-width: unset; }
+  .filterSelect { width: 100%; }
+
+  /* Solo mostrar columnas esenciales */
+  .table th:nth-child(2),
+  .table td:nth-child(2) { display: none; } /* Usuario (oculto en muy pequeño) */
+  .table th:nth-child(5),
+  .table td:nth-child(5) { display: none; } /* Descripción */
+}
