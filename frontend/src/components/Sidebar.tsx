@@ -7,7 +7,7 @@ import { usePathname } from 'next/navigation';
 import {
   LayoutDashboard, UserCog, ShieldCheck, KeyRound, Activity, LogOut,
   Eye, X, ShieldAlert, UsersRound,
-  UserRoundCog, CalendarClock, CalendarDays, Stethoscope, FileText,
+  UserRoundCog, CalendarClock, CalendarDays, Stethoscope, FileText, ClipboardList,
 } from 'lucide-react';
 import { useDashboardUser } from '@/contexts/DashboardUserContext';
 import { logoutApi } from '@/lib/api';
@@ -50,8 +50,9 @@ const NAV_GROUPS: NavGroup[] = [
   },
   {
     label: 'Historial clínico',
-    items: [],
-    note: 'Próximamente',
+    items: [
+      { href: '/dashboard/historial-clinico', icon: ClipboardList, label: 'Historial clínico' },
+    ],
   },
   {
     label: 'Bitácora',

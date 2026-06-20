@@ -1,19 +1,20 @@
 import type { MeProfile } from './meProfile';
 
-export type AppModule = 'pacientes' | 'especialistas' | 'medicos' | 'citas' | 'consultas';
+export type AppModule = 'pacientes' | 'especialistas' | 'medicos' | 'citas' | 'consultas' | 'historialclinico';
 export type ClinicalModule = AppModule | 'agenda' | 'dashboard' | 'reportes';
 export type CitasAction = 'crear' | 'reprogramar' | 'cancelar';
 
 const CLINICAL_VIEW_ROLES = new Set(['ADMIN', 'ADMINISTRATIVO', 'MEDICO', 'ESPECIALISTA']);
 const ADMIN_ONLY_ROUTES = new Set(['/dashboard/seguridad-login']);
 const IAM_ADMIN_ROUTES = new Set(['/dashboard/usuarios', '/dashboard/roles', '/dashboard/permisos']);
-const CLINICAL_ROUTES = new Set(['/dashboard', '/dashboard/dashboard', '/dashboard/pacientes', '/dashboard/especialistas', '/dashboard/medicos', '/dashboard/citas', '/dashboard/agenda-medica', '/dashboard/consultas', '/dashboard/reportes']);
+const CLINICAL_ROUTES = new Set(['/dashboard', '/dashboard/dashboard', '/dashboard/pacientes', '/dashboard/especialistas', '/dashboard/medicos', '/dashboard/citas', '/dashboard/agenda-medica', '/dashboard/consultas', '/dashboard/reportes', '/dashboard/historial-clinico']);
 const CLINICAL_VIEW_ROLES_BY_MODULE: Record<ClinicalModule, ReadonlySet<string>> = {
   pacientes: CLINICAL_VIEW_ROLES,
   especialistas: CLINICAL_VIEW_ROLES,
   medicos: CLINICAL_VIEW_ROLES,
   citas: CLINICAL_VIEW_ROLES,
   consultas: CLINICAL_VIEW_ROLES,
+  historialclinico: new Set(['ADMIN', 'MEDICO', 'ESPECIALISTA']),
   agenda: CLINICAL_VIEW_ROLES,
   dashboard: CLINICAL_VIEW_ROLES,
   reportes: CLINICAL_VIEW_ROLES,
@@ -25,6 +26,7 @@ const WRITE_ROLES_BY_MODULE: Record<AppModule, ReadonlySet<string>> = {
   medicos: new Set(['ADMIN', 'ADMINISTRATIVO']),
   citas: new Set(['ADMIN', 'ADMINISTRATIVO']),
   consultas: new Set(['ADMIN', 'MEDICO', 'ESPECIALISTA']),
+  historialclinico: new Set(['ADMIN', 'MEDICO']),
 };
 
 const VIEW_PERMISSIONS_BY_MODULE: Record<ClinicalModule, string[]> = {
@@ -33,6 +35,7 @@ const VIEW_PERMISSIONS_BY_MODULE: Record<ClinicalModule, string[]> = {
   medicos: ['medicos.listar'],
   citas: ['citas.listar'],
   consultas: ['consultas.listar'],
+  historialclinico: ['historialclinico.listar'],
   agenda: ['agenda.ver'],
   dashboard: ['dashboard.ver'],
   reportes: ['reportes.ver'],
@@ -44,6 +47,7 @@ const WRITE_PERMISSIONS_BY_MODULE: Record<AppModule, string[]> = {
   medicos: ['medicos.crear', 'medicos.editar', 'medicos.eliminar'],
   citas: ['citas.crear', 'citas.reprogramar', 'citas.cancelar'],
   consultas: ['consultas.crear'],
+  historialclinico: ['historialclinico.archivar'],
 };
 
 const CITA_ACTION_PERMISSION: Record<CitasAction, string> = {
@@ -86,6 +90,7 @@ export function canViewRoute(me: MeProfile | null, href: string, permissionCodes
       '/dashboard/agenda-medica': 'agenda',
       '/dashboard/consultas': 'consultas',
       '/dashboard/reportes': 'reportes',
+      '/dashboard/historial-clinico': 'historialclinico',
     };
     const clinicalModule = byModule[href];
     return canViewClinicalModule(me, clinicalModule, permissionCodes);

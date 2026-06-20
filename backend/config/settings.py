@@ -70,6 +70,7 @@ LOCAL_APPS = [
     'apps.GestionClinica.consultas',
     'apps.ReportesEstadisticas.dashboard',
     'apps.ReportesEstadisticas.reportes',
+    'apps.HistorialClinico.historial',  # CU20 Archivar historial clínico
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -84,6 +85,7 @@ MIGRATION_MODULES = {
     'medicos': 'apps.GestionClinica.medicos.migrations',
     'citas': 'apps.GestionClinica.citas.migrations',
     'consultas': 'apps.GestionClinica.consultas.migrations',
+    'historial_clinico': 'apps.HistorialClinico.historial.migrations',
 }
 
 # =============================================================================
