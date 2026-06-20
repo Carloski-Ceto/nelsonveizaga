@@ -26,6 +26,18 @@ class HistorialClinicoSerializer(serializers.ModelSerializer):
     def get_paciente_nombre_completo(self, obj):
         return f"{obj.id_paciente.nombres} {obj.id_paciente.apellidos}"
 
+    def validate(self, attrs):
+        id_paciente = attrs.get('id_paciente')
+        if id_paciente:
+            qs = HistorialClinico.objects.filter(id_paciente=id_paciente, estado=EstadoHistorial.ACTIVO)
+            if self.instance:
+                qs = qs.exclude(pk=self.instance.pk)
+            if qs.exists():
+                raise serializers.ValidationError(
+                    {'id_paciente': 'El paciente ya tiene un historial clínico activo.'}
+                )
+        return attrs
+
     def create(self, validated_data):
         validated_data['registrado_por'] = self.context['request'].user
         return super().create(validated_data)

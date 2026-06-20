@@ -35,13 +35,20 @@ interface EspecialistaOption {
   especialidad: string;
 }
 
+interface PacienteOption {
+  id_paciente: number;
+  nombres: string;
+  apellidos: string;
+  documento_identidad: string;
+}
+
 interface ApiPage<T> {
   count: number;
   results: T[];
 }
 
 type FilterEstado = 'ACTIVO' | 'ARCHIVADO' | '';
-type ModalKind = 'archivar' | null;
+type ModalKind = 'archivar' | 'create' | 'edit' | null;
 
 const PAGE_SIZE = 20;
 
@@ -73,10 +80,14 @@ export default function HistorialClinicoPage() {
   const [ok, setOk] = useState<string | null>(null);
 
   const [filterEstado, setFilterEstado] = useState<FilterEstado>('');
+  const [searchQuery, setSearchQuery] = useState('');
 
   const [modal, setModal] = useState<ModalKind>(null);
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [motivoArchivo, setMotivoArchivo] = useState('');
+  const [formPacienteId, setFormPacienteId] = useState<string>('');
+  const [pacientes, setPacientes] = useState<PacienteOption[]>([]);
+  const [pacientesLoading, setPacientesLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [formErr, setFormErr] = useState<string | null>(null);
 
@@ -87,8 +98,9 @@ export default function HistorialClinicoPage() {
     const params = new URLSearchParams();
     params.set('page', String(page));
     if (filterEstado) params.set('estado', filterEstado);
+    if (searchQuery.trim()) params.set('search', searchQuery.trim());
     return params.toString();
-  }, [page, filterEstado]);
+  }, [page, filterEstado, searchQuery]);
 
   const load = useCallback(async () => {
     if (!canView) {
@@ -138,8 +150,116 @@ export default function HistorialClinicoPage() {
     setModal(null);
     setSelectedId(null);
     setMotivoArchivo('');
+    setFormPacienteId('');
     setFormErr(null);
     setSaving(false);
+  }
+
+  function resetMessages() {
+    setError(null);
+    setOk(null);
+    setFormErr(null);
+  }
+
+  const loadPacientes = async () => {
+    setPacientesLoading(true);
+    try {
+      const res = await api.get<{ results: PacienteOption[] }>(
+        '/api/pacientes?page=1&page_size=500&ordering=apellidos'
+      );
+      setPacientes(res.data.results ?? []);
+    } catch (e) {
+      console.error('Error al cargar pacientes:', e);
+    } finally {
+      setPacientesLoading(false);
+    }
+  };
+
+  function openCreate() {
+    if (!canWrite) {
+      setError('No tienes permiso para crear historiales clínicos.');
+      return;
+    }
+    resetMessages();
+    setFormPacienteId('');
+    setModal('create');
+    void loadPacientes();
+  }
+
+  function openEdit(row: HistorialRow) {
+    if (!canWrite) {
+      setError('No tienes permiso para editar historiales clínicos.');
+      return;
+    }
+    resetMessages();
+    setFormPacienteId(String(row.id_paciente));
+    setSelectedId(row.id_historial);
+    setModal('edit');
+    void loadPacientes();
+  }
+
+  async function submitCreate() {
+    if (!formPacienteId) {
+      setFormErr('Debes seleccionar un paciente.');
+      return;
+    }
+    setSaving(true);
+    setFormErr(null);
+    try {
+      await api.post('/api/historial-clinico', {
+        id_paciente: Number(formPacienteId),
+      });
+      setOk('Historial clínico creado correctamente.');
+      closeModal();
+      await load();
+    } catch (e) {
+      setFormErr(parseApiError(e));
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  async function submitEdit() {
+    if (!selectedId) return;
+    if (!formPacienteId) {
+      setFormErr('Debes seleccionar un paciente.');
+      return;
+    }
+    setSaving(true);
+    setFormErr(null);
+    try {
+      await api.patch(`/api/historial-clinico/${selectedId}`, {
+        id_paciente: Number(formPacienteId),
+      });
+      setOk('Historial clínico editado correctamente.');
+      closeModal();
+      await load();
+    } catch (e) {
+      setFormErr(parseApiError(e));
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  async function eliminar(row: HistorialRow) {
+    if (!canWrite) {
+      setError('No tienes permiso para eliminar historiales clínicos.');
+      return;
+    }
+    if (
+      !window.confirm(
+        `¿Estás seguro de eliminar permanentemente el historial clínico #${row.id_historial}? Esta acción no se puede deshacer.`
+      )
+    )
+      return;
+    resetMessages();
+    try {
+      await api.delete(`/api/historial-clinico/${row.id_historial}`);
+      setOk('Historial clínico eliminado correctamente.');
+      await load();
+    } catch (e) {
+      setError(parseApiError(e));
+    }
   }
 
   function openArchivar(id: number) {
@@ -225,11 +345,25 @@ export default function HistorialClinicoPage() {
 
       {!canWrite && (
         <div className={styles.error}>
-          Tu rol es de solo lectura en Historial clínico. Puedes consultar y filtrar, pero no archivar ni restaurar.
+          Tu rol es de solo lectura en Historial clínico. Puedes consultar y filtrar, pero no crear, editar, eliminar, archivar ni restaurar.
         </div>
       )}
 
       <div className={styles.toolbar}>
+        <div className={styles.field}>
+          <label className={styles.label} htmlFor="search">Buscar Paciente</label>
+          <input
+            id="search"
+            type="text"
+            className={styles.input}
+            placeholder="Buscar por nombre o apellido..."
+            value={searchQuery}
+            onChange={(e) => {
+              setPage(1);
+              setSearchQuery(e.target.value);
+            }}
+          />
+        </div>
         <div className={styles.field}>
           <label className={styles.label} htmlFor="estado">Estado</label>
           <select
@@ -246,10 +380,16 @@ export default function HistorialClinicoPage() {
             <option value="ARCHIVADO">Archivado</option>
           </select>
         </div>
+        <div /> {/* Spacer to align actions in the 4th column */}
         <div className={styles.actions}>
           <button type="button" className={styles.btn} onClick={() => load()} disabled={loading}>
             Recargar
           </button>
+          {canWrite && (
+            <button type="button" className={styles.btnPrimary} onClick={openCreate}>
+              Crear Historial
+            </button>
+          )}
         </div>
       </div>
 
@@ -303,13 +443,22 @@ export default function HistorialClinicoPage() {
                 <td>
                   <div className={styles.tableActions}>
                     {row.estado === 'ACTIVO' && canWrite && (
-                      <button
-                        type="button"
-                        className={styles.btn}
-                        onClick={() => openArchivar(row.id_historial)}
-                      >
-                        Archivar
-                      </button>
+                      <>
+                        <button
+                          type="button"
+                          className={styles.btn}
+                          onClick={() => openEdit(row)}
+                        >
+                          Editar
+                        </button>
+                        <button
+                          type="button"
+                          className={styles.btn}
+                          onClick={() => openArchivar(row.id_historial)}
+                        >
+                          Archivar
+                        </button>
+                      </>
                     )}
                     {row.estado === 'ARCHIVADO' && canWrite && (
                       <button
@@ -318,6 +467,15 @@ export default function HistorialClinicoPage() {
                         onClick={() => restaurar(row)}
                       >
                         Restaurar
+                      </button>
+                    )}
+                    {canWrite && (
+                      <button
+                        type="button"
+                        className={styles.btnDanger}
+                        onClick={() => eliminar(row)}
+                      >
+                        Eliminar
                       </button>
                     )}
                   </div>
@@ -388,6 +546,63 @@ export default function HistorialClinicoPage() {
                 </button>
                 <button type="submit" className={styles.btnPrimary} disabled={saving}>
                   {saving ? 'Archivando...' : 'Archivar'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {(modal === 'create' || modal === 'edit') && (
+        <div
+          className={styles.modalBackdrop}
+          role="presentation"
+          onClick={closeModal}
+        >
+          <div
+            className={styles.modalPanel}
+            role="dialog"
+            aria-modal="true"
+            aria-label={modal === 'create' ? 'Crear historial clínico' : 'Editar historial clínico'}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h2 className={styles.modalTitle}>
+              {modal === 'create' ? 'Crear historial clínico' : 'Editar historial clínico'}
+            </h2>
+            {formErr && <div className={styles.error}>{formErr}</div>}
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                void (modal === 'create' ? submitCreate() : submitEdit());
+              }}
+            >
+              <div className={styles.field}>
+                <label className={styles.label} htmlFor="form_paciente_id">Paciente</label>
+                {pacientesLoading ? (
+                  <p>Cargando pacientes...</p>
+                ) : (
+                  <select
+                    id="form_paciente_id"
+                    className={styles.select}
+                    value={formPacienteId}
+                    onChange={(e) => setFormPacienteId(e.target.value)}
+                    required
+                  >
+                    <option value="">Seleccione un paciente</option>
+                    {pacientes.map((p) => (
+                      <option key={p.id_paciente} value={p.id_paciente}>
+                        {p.apellidos}, {p.nombres} · {p.documento_identidad || `ID ${p.id_paciente}`}
+                      </option>
+                    ))}
+                  </select>
+                )}
+              </div>
+              <div className={styles.modalActions}>
+                <button type="button" className={styles.btnGhost} onClick={closeModal} disabled={saving}>
+                  Cancelar
+                </button>
+                <button type="submit" className={styles.btnPrimary} disabled={saving || pacientesLoading}>
+                  {saving ? 'Guardando...' : 'Guardar'}
                 </button>
               </div>
             </form>
