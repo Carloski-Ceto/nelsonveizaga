@@ -36,6 +36,7 @@
   - `agenda`: `GET /api/agenda-medica` (solo lectura por rol médico/admin).
   - `consultas`: CRUD `GET/POST /api/consultas-medicas`.
   - `evoluciones`: CRUD `GET/POST /api/historial-clinico/{historial_id}/evoluciones`, `GET/PUT/DELETE /api/historial-clinico/{historial_id}/evoluciones/{id}`.
+  - `antecedentes`: CRUD `GET/POST /api/historial-clinico/{historial_id}/antecedentes`, `GET/PUT/DELETE /api/historial-clinico/{historial_id}/antecedentes/{id}`.
 - **Bitácora:** `GET /api/bitacora/` (lectura; permisos según rol); escritura desde el backend en operaciones que registren eventos.
 - **Seed unificado:** `python manage.py seed` en `apps/core/management/commands/seed.py` — ejecuta `seeders.seed_admin`, `seeders.seed_roles`, `seeders.seed_permisos`, `seeders.seed_rbac_asignaciones`, `seeders.seed_clinica`, `seeders.seed_consultas_demo`, `seeders.seed_dashboard_demo`. Opción `--only admin|roles|permisos|rbac|clinica|consultas-demo|dashboard-demo`.
 - **Seeder clínico (`--only clinica`):** crea datos base idempotentes para demo (usuarios clínicos, especialistas, pacientes, horarios y cita futura).
@@ -46,6 +47,12 @@
 - **Suite de pruebas inicial (backend):** se agregaron pruebas automáticas para política de contraseña, creación de usuario con validación de password y endpoint `/api/auth/permissions` (roles+permisos efectivos).
 
 ## Frontend (Next.js)
+- **Módulo Antecedentes del Paciente (CU19 - 2026-06-20):**
+  - Implementado como página dedicada independiente en `/dashboard/antecedentes`.
+  - Ofrece un diseño split-screen premium:
+    - Columna izquierda: listado de pacientes con su nombre completo e historiales clínicos activos (buscables por ID/nombre y paginados).
+    - Columna derecha: si no hay selección, muestra un estado vacío instructivo con iconografía de salud. Si se selecciona un paciente, despliega su nombre completo en la cabecera, sus antecedentes históricos ordenados de manera cronológica descendente, filtrables por tipo (Patológico, No Patológico, Familiar, Quirúrgico, Alérgico, Otro) y con opciones de edición rápida y eliminación inline reguladas por RBAC, y el formulario correspondiente para registrar nuevos antecedentes (validando estado del expediente).
+  - El helper `frontend/src/lib/authorization.ts` mapea la ruta `/dashboard/antecedentes` y controla accesos independientes con permisos finos.
 - **Módulo Evoluciones del Paciente (CU15 - 2026-06-20):**
   - Implementado como una página dedicada independiente en `/dashboard/evoluciones`.
   - Ofrece un diseño split-screen premium:
@@ -230,4 +237,4 @@ El archivo **`BaseDeDatos.sql`** (DBML para dbdiagram.io) debe mantenerse alinea
 - Objetivo: reducir pasos manuales y estandarizar ejecución del flujo agente-first.
 
 ---
-*(Actualizado: 2026-05-07)*
+*(Actualizado: 2026-06-20)*

@@ -66,6 +66,12 @@ PERMISOS = [
     {'codigo': 'evoluciones.editar',   'nombre': 'Editar evolución',     'modulo': 'evoluciones'},
     {'codigo': 'evoluciones.eliminar', 'nombre': 'Eliminar evolución',   'modulo': 'evoluciones'},
 
+    # Antecedentes
+    {'codigo': 'antecedentes.listar',   'nombre': 'Listar antecedentes',   'modulo': 'antecedentes'},
+    {'codigo': 'antecedentes.crear',    'nombre': 'Crear antecedente',      'modulo': 'antecedentes'},
+    {'codigo': 'antecedentes.editar',   'nombre': 'Editar antecedente',     'modulo': 'antecedentes'},
+    {'codigo': 'antecedentes.eliminar', 'nombre': 'Eliminar antecedente',   'modulo': 'antecedentes'},
+
     # Historial Clínico
     {'codigo': 'historialclinico.listar',   'nombre': 'Listar historial clínico',   'modulo': 'historialclinico'},
     {'codigo': 'historialclinico.archivar', 'nombre': 'Archivar historial clínico', 'modulo': 'historialclinico'},
