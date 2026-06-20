@@ -10,6 +10,13 @@ Este archivo documenta todas las decisiones técnicas arquitectónicas important
 
 ---
 
+### Registro 65
+
+**Fecha:** 2026-06-20
+**Decisión:** Diseñar e implementar el módulo clínico "Registrar Antecedentes del Paciente (CU19)" con enrutamiento nested `/api/historial-clinico/{historial_id}/antecedentes`, enriquecimiento dinámico de registrado_por_nombre y UI split-screen con colores semánticos por tipo de antecedente.
+**Motivo:** Asegurar que cada antecedente clínico esté estrictamente vinculado a un expediente clínico activo (no archivado). Se utilizó un serializador enriquecido para que la UI muestre el nombre completo del registrador de forma limpia. En la UI, se implementó un diseño dividido (Split-Screen) con filtros interactivos por tipo y colores de insignias personalizados para una experiencia premium y legible para el personal médico.
+**Impacto:** Creación de la app backend `antecedentes`, pruebas unitarias exhaustivas (9/9 aprobadas), registro de permisos y asignaciones RBAC (`antecedentes.listar/crear/editar/eliminar`), adición del enlace en `Sidebar.tsx` e implementación de la página y hoja de estilos modular.
+
 ### Registro 64
 
 **Fecha:** 2026-06-20

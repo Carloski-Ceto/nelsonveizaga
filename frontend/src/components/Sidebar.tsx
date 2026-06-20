@@ -54,6 +54,7 @@ const NAV_GROUPS: NavGroup[] = [
     label: 'Historial clínico',
     items: [
       { href: '/dashboard/historial-clinico', icon: ClipboardList, label: 'Historial clínico' },
+      { href: '/dashboard/antecedentes', icon: FileText, label: 'Antecedentes' },
     ],
   },
   {

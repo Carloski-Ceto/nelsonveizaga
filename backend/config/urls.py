@@ -38,6 +38,7 @@ api_patterns = [
     path('', include('apps.ReportesEstadisticas.dashboard.urls')),
     path('', include('apps.ReportesEstadisticas.reportes.urls')),
     path('', include('apps.HistorialClinico.historial.urls')),
+    path('', include('apps.HistorialClinico.antecedentes.urls')),
     path('', include('apps.GestionClinica.pagos.urls')),
 ]
 

@@ -6,7 +6,21 @@
 2026-06-20
 
 ## Actualización rápida (2026-06-20)
-1. **Caso de Uso "Gestionar evolución del paciente" (CU15) implementado en Backend y Frontend:**
+1. **Caso de Uso "Registrar antecedentes del paciente" (CU19) implementado en Backend y Frontend:**
+   - **Backend Modular `antecedentes`:**
+     - Creado submódulo `apps.HistorialClinico.antecedentes` en `backend/apps/HistorialClinico/antecedentes/` con enrutamiento anidado `/api/historial-clinico/{historial_id}/antecedentes`.
+     - Modelo `AntecedentePaciente` y enum `TipoAntecedente` definidos.
+     - El serializador valida activamente que el expediente clínico (`HistorialClinico`) exista, que no esté en estado `ARCHIVADO`, y enriquece las respuestas con `registrado_por_nombre` dinámicamente.
+     - Permiso personalizado `IsMedicoOrAdminWriteAdministrativoRead` restringe la escritura a médicos/admins y autoriza la lectura a recepción/personal administrativo.
+     - Registro en la bitácora de auditoría para todas las acciones destructivas (`CREAR`, `EDITAR`, `ELIMINAR`).
+     - Permisos granulares de antecedentes registrados en `seed_permisos.py` y asignados a roles en `seed_rbac_asignaciones.py` (idempotente).
+     - Suite completa de 9 pruebas unitarias/integración creada en `apps/HistorialClinico/antecedentes/tests.py` que pasa al 100%.
+   - **Frontend Next.js Integrado:**
+     - Modificado `frontend/src/lib/authorization.ts` para registrar la ruta `/dashboard/antecedentes` y mapearla al módulo de `'antecedentes'`.
+     - Creado enlace "Antecedentes" en el menú lateral de navegación [Sidebar.tsx](file:///c:/Universidad/1-2026/Sistemas%20de%20Informaci%C3%B3n%20I/proyecto-final/frontend/src/components/Sidebar.tsx) bajo el grupo de "Historial clínico".
+     - Creada la página independiente `frontend/src/app/dashboard/antecedentes/page.tsx` y su hoja de estilos `page.module.css` con el layout split-screen para gestionar y registrar antecedentes seleccionando el paciente, con filtros dinámicos por tipo, edición en sitio y eliminación.
+     - Verificado con éxito la compilación del frontend (`npm run build`) y el linter (`npm run lint`) con 0 advertencias/errores.
+2. **Caso de Uso "Gestionar evolución del paciente" (CU15) implementado en Backend y Frontend:**
    - **Backend Modular `evoluciones`:**
      - Creado submódulo `apps.GestionClinica.evoluciones` con el label `evoluciones` y enrutamiento anidado (`/api/historial-clinico/{historial_id}/evoluciones`).
      - Modelo `EvolucionPaciente` creado con llaves foráneas protegidas (`PROTECT`) hacia `HistorialClinico`, `Especialista` y `Usuario` (registrado_por).
