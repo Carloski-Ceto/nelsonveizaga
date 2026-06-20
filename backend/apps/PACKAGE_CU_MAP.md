@@ -19,8 +19,8 @@ Alias lógico: `apps/Usuarios/*`
 - CU12 Registrar triaje y PIO -> `apps.consultas`
 - CU13 Registrar examen de refracción -> `apps.consultas`
 - CU14 Registrar diagnóstico -> `apps.consultas`
-- CU15 Registrar evolución del paciente -> **pendiente módulo dedicado**
-- CU16 Emitir receta de medicamentos -> **pendiente módulo dedicado**
+- CU15 Registrar evolución del paciente -> `apps.GestionClinica.evoluciones`
+- CU16 Emitir receta de medicamentos -> `apps.GestionClinica.recetas`
 - CU17 Emitir receta de lentes/contacto -> **pendiente módulo dedicado**
 
 Alias lógico: `apps/GestionClinica/*`

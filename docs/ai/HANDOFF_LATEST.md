@@ -5,6 +5,25 @@
 ## Fecha
 2026-06-20
 
+## Actualización rápida (2026-06-20 - recetas)
+1. **Caso de Uso "Emitir receta de medicamentos" (CU16) implementado en Backend y Frontend:**
+   - **Backend Modular `recetas`:**
+     - Creado submódulo `apps.GestionClinica.recetas` con el label `recetas` y enrutamiento anidado (`/api/historial-clinico/{historial_id}/recetas`).
+     - Modelo `RecetaMedicamento` creado con llaves foráneas protegidas (`PROTECT`) hacia `HistorialClinico`, `ConsultaMedica` (opcional) y `Usuario` (registrado_por).
+     - Serializador valida el listado de medicamentos en formato JSONField (dosis, frecuencia, duración y nombre obligatorios) y el estado activo del historial.
+     - Registro en la bitácora de auditoría para todas las acciones (`CREAR`, `EDITAR`, `ELIMINAR`).
+     - Permisos granulares de recetas registrados en `seed_permisos.py` y asignados en `seed_rbac_asignaciones.py`.
+   - **Frontend Next.js Integrado:**
+     - Modificado `frontend/src/lib/authorization.ts` para registrar la ruta `/dashboard/recetas` y sus permisos.
+     - Creada la página `frontend/src/app/dashboard/recetas/page.tsx` y su hoja de estilos `page.module.css` con layout split-screen para gestionar recetas médicas de pacientes activos.
+     - Implementado el formulario reactivo dinámico que permite añadir/remover fármacos y firmar la receta con el usuario autenticado.
+     - Implementada la edición inline interactiva dentro de las tarjetas de recetas emitidas anteriormente, con soporte reactivo para añadir/remover medicamentos y cambiar indicaciones.
+     - Integrada la eliminación segura de recetas con confirmación previa y feedback visual.
+     - Soporte de impresión profesional mediante CSS `@media print` en la página para imprimir una receta clínica de medicamentos limpia y formateada.
+     - Agregada la opción **"Emitir Recetas"** en el sidebar izquierdo bajo "Gestión clínica".
+   - **Suite de pruebas unitarias completada:**
+     - Creada suite en `recetas/tests/test_recetas.py` (4 casos de prueba) que validan accesos, validaciones y bitácora. Todo pasando con éxito (36/36 tests totales en verde).
+
 ## Actualización rápida (2026-06-20)
 1. **Caso de Uso "Registrar antecedentes del paciente" (CU19) implementado en Backend y Frontend:**
    - **Backend Modular `antecedentes`:**

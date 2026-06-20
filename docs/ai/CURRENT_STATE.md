@@ -36,6 +36,7 @@
   - `agenda`: `GET /api/agenda-medica` (solo lectura por rol médico/admin).
   - `consultas`: CRUD `GET/POST /api/consultas-medicas`.
   - `evoluciones`: CRUD `GET/POST /api/historial-clinico/{historial_id}/evoluciones`, `GET/PUT/DELETE /api/historial-clinico/{historial_id}/evoluciones/{id}`.
+  - `recetas`: CRUD `GET/POST /api/historial-clinico/{historial_id}/recetas`, `GET/PUT/PATCH/DELETE /api/historial-clinico/{historial_id}/recetas/{id}`.
   - `antecedentes`: CRUD `GET/POST /api/historial-clinico/{historial_id}/antecedentes`, `GET/PUT/DELETE /api/historial-clinico/{historial_id}/antecedentes/{id}`.
 - **Bitácora:** `GET /api/bitacora/` (lectura; permisos según rol); escritura desde el backend en operaciones que registren eventos.
 - **Seed unificado:** `python manage.py seed` en `apps/core/management/commands/seed.py` — ejecuta `seeders.seed_admin`, `seeders.seed_roles`, `seeders.seed_permisos`, `seeders.seed_rbac_asignaciones`, `seeders.seed_clinica`, `seeders.seed_consultas_demo`, `seeders.seed_dashboard_demo`. Opción `--only admin|roles|permisos|rbac|clinica|consultas-demo|dashboard-demo`.
@@ -47,6 +48,13 @@
 - **Suite de pruebas inicial (backend):** se agregaron pruebas automáticas para política de contraseña, creación de usuario con validación de password y endpoint `/api/auth/permissions` (roles+permisos efectivos).
 
 ## Frontend (Next.js)
+<<<<<<< HEAD
+- **Módulo Emitir Recetas (CU16 - 2026-06-20):**
+  - Implementado como una página dedicada independiente en `/dashboard/recetas` y rotulado en el menú como **"Emitir Recetas"**.
+  - Ofrece un diseño split-screen premium consistente con el de evoluciones (listado de pacientes activos buscables a la izquierda; historial de recetas y formulario interactivo a la derecha).
+  - Incorpora un formulario dinámico que permite añadir/remover medicamentos de forma reactiva, validando obligatoriedad de dosis, frecuencia y duración, asociando de forma inmutable la firma del médico logueado.
+  - Implementa edición inline reactiva y borrado seguro de recetas emitidas en la columna de recetas anteriores, regulado bajo permisos de RBAC (`canWrite` evaluando `recetas.editar` y `recetas.eliminar`).
+  - Diseñado con soporte de impresión profesional mediante CSS `@media print` que oculta el portal web e imprime una receta de medicamentos limpia y formateada.
 - **Módulo Antecedentes del Paciente (CU19 - 2026-06-20):**
   - Implementado como página dedicada independiente en `/dashboard/antecedentes`.
   - Ofrece un diseño split-screen premium:

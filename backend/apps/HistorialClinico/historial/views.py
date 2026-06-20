@@ -30,7 +30,13 @@ class HistorialClinicoViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, IsMedicoOrAdminWriteAdministrativoRead]
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_fields = ['id_paciente', 'estado']
-    search_fields = ['id_paciente__nombres', 'id_paciente__apellidos']
+    search_fields = [
+        '=id_historial',
+        '=id_paciente__id_paciente',
+        'id_paciente__nombres',
+        'id_paciente__apellidos',
+        '^id_paciente__documento_identidad',
+    ]
     ordering_fields = ['fecha_creacion', 'fecha_archivo', 'estado']
     ordering = ['-fecha_creacion']
 

@@ -48,6 +48,12 @@ const NAV_GROUPS: NavGroup[] = [
       { href: '/dashboard/agenda-medica', icon: CalendarDays, label: 'Agenda médica' },
       { href: '/dashboard/consultas', icon: Stethoscope, label: 'Consultas' },
       { href: '/dashboard/evoluciones', icon: TrendingUp, label: 'Evoluciones' },
+      { href: '/dashboard/recetas', icon: FileText, label: 'Emitir Recetas' },
+    ],
+  },
+  {
+    label: 'Historial clínico',
+    items: [
       { href: '/dashboard/historial-clinico', icon: ClipboardList, label: 'Historial clínico' },
       { href: '/dashboard/antecedentes', icon: FileText, label: 'Antecedentes' },
     ],

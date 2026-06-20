@@ -34,6 +34,7 @@ api_patterns = [
     path('', include('apps.GestionClinica.medicos.urls')),
     path('', include('apps.GestionClinica.citas.urls')),
     path('', include('apps.GestionClinica.consultas.urls')),
+    path('', include('apps.GestionClinica.recetas.urls')),
     path('', include('apps.GestionClinica.evoluciones.urls')),
     path('', include('apps.ReportesEstadisticas.dashboard.urls')),
     path('', include('apps.ReportesEstadisticas.reportes.urls')),

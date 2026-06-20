@@ -69,6 +69,7 @@ LOCAL_APPS = [
     'apps.GestionClinica.citas',
     'apps.GestionClinica.consultas',
     'apps.GestionClinica.evoluciones',
+    'apps.GestionClinica.recetas',
     'apps.ReportesEstadisticas.dashboard',
     'apps.ReportesEstadisticas.reportes',
     'apps.HistorialClinico.historial',  # CU20 Archivar historial clínico
@@ -89,6 +90,7 @@ MIGRATION_MODULES = {
     'citas': 'apps.GestionClinica.citas.migrations',
     'consultas': 'apps.GestionClinica.consultas.migrations',
     'evoluciones': 'apps.GestionClinica.evoluciones.migrations',
+    'recetas': 'apps.GestionClinica.recetas.migrations',
     'historial_clinico': 'apps.HistorialClinico.historial.migrations',
     'antecedentes': 'apps.HistorialClinico.antecedentes.migrations',
     'pagos': 'apps.GestionClinica.pagos.migrations',

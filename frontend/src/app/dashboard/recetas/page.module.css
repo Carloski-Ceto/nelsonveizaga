@@ -1,0 +1,796 @@
+.page {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - var(--header-height, 4rem) - var(--space-8, 2rem));
+  min-height: 38rem;
+}
+
+.header {
+  margin-bottom: var(--space-5);
+  flex-shrink: 0;
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(1.4rem, 2.2vw, 2rem);
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  margin: var(--space-2) 0 0;
+  color: var(--color-text-secondary);
+  max-width: 62ch;
+  font-size: var(--text-sm);
+}
+
+.error,
+.ok {
+  margin-bottom: var(--space-4);
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--text-sm);
+  flex-shrink: 0;
+}
+
+.error {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #991b1b;
+}
+
+.ok {
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  color: #065f46;
+}
+
+.mainGrid {
+  display: grid;
+  grid-template-columns: 20rem 1fr;
+  gap: var(--space-5);
+  flex-grow: 1;
+  min-height: 0;
+}
+
+/* Sidebar Patient List */
+.sidebarSection {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-xl);
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  box-shadow: var(--shadow-sm);
+  min-height: 0;
+}
+
+.searchBox {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  flex-shrink: 0;
+}
+
+.label {
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-muted);
+  font-weight: 700;
+  margin-bottom: 0.3rem;
+}
+
+.input {
+  width: 100%;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-background-body, #fafafb);
+  padding: 0.56rem 0.8rem;
+  font-size: var(--text-sm);
+  color: var(--color-text);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.12);
+}
+
+.patientList {
+  flex-grow: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding-right: var(--space-1);
+}
+
+.loadingText {
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+  text-align: center;
+  padding: var(--space-4);
+}
+
+.patientCard {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s ease;
+}
+
+.patientCard:hover {
+  border-color: rgba(124, 58, 237, 0.3);
+  background: rgba(124, 58, 237, 0.02);
+}
+
+.patientCardActive {
+  border-color: var(--color-primary);
+  background: rgba(124, 58, 237, 0.06) !important;
+  box-shadow: 0 0 0 1px var(--color-primary);
+}
+
+.patientCardIcon {
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: var(--radius-md);
+  background: rgba(124, 58, 237, 0.08);
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.patientCardDetails {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.patientCardTitle {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.patientCardSub {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  margin-top: 0.12rem;
+}
+
+.sidebarPager {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--color-border-light);
+  padding-top: var(--space-3);
+  flex-shrink: 0;
+}
+
+.btnSmall {
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  padding: 0.35rem 0.7rem;
+  font-size: var(--text-xs);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btnSmall:hover:not(:disabled) {
+  background: var(--color-background-body);
+}
+
+.btnSmall:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pagerLabel {
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+}
+
+/* Detail Section */
+.detailSection {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.emptyState {
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 24rem;
+  padding: var(--space-8);
+}
+
+.emptyStateIcon {
+  width: 5rem;
+  height: 5rem;
+  border-radius: 50%;
+  background: rgba(124, 58, 237, 0.06);
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--space-4);
+}
+
+.emptyStateTitle {
+  font-size: var(--text-lg);
+  font-weight: 700;
+  margin: 0 0 var(--space-2);
+}
+
+.emptyStateSub {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.contentWrap {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
+.detailHeader {
+  padding: var(--space-4) var(--space-5);
+  border-bottom: 1px solid var(--color-border-light);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.detailTitle {
+  margin: 0;
+  font-size: var(--text-lg);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.detailSubtitle {
+  margin: 0.2rem 0 0;
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+.badge {
+  font-size: var(--text-xs);
+  font-weight: 700;
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.badgeActive {
+  background: #ecfdf5;
+  color: #065f46;
+}
+
+.badgeInactive {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.splitGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  flex-grow: 1;
+  min-height: 0;
+}
+
+.historyColumn,
+.formColumn {
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-height: 0;
+}
+
+.historyColumn {
+  border-right: 1px solid var(--color-border-light);
+  overflow-y: auto;
+}
+
+.formColumn {
+  overflow-y: auto;
+  background: #fafafb;
+}
+
+.columnTitle {
+  font-size: var(--text-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 800;
+  color: var(--color-text-secondary);
+  margin: 0 0 var(--space-2);
+}
+
+/* Receta List */
+.recetaList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.recetaCard {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+.recetaCardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px dashed var(--color-border-light);
+  padding-bottom: var(--space-2);
+  margin-bottom: var(--space-3);
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.recetaMeta {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+}
+
+.medicoName {
+  color: var(--color-text);
+}
+
+.recetaDate {
+  color: var(--color-text-muted);
+}
+
+.btnPrintGhost {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 0.3rem 0.6rem;
+  font-size: var(--text-xs);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btnPrintGhost:hover {
+  background: var(--color-primary-50);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.recetaBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.miniTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-xs);
+}
+
+.miniTable th,
+.miniTable td {
+  padding: 0.4rem 0.5rem;
+  text-align: left;
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.miniTable th {
+  font-weight: 700;
+  color: var(--color-text-secondary);
+  background: #f9fafb;
+}
+
+.indicacionesBlock {
+  font-size: var(--text-xs);
+  background: var(--color-background-body, #fafafb);
+  border-radius: var(--radius-md);
+  padding: var(--space-2) var(--space-3);
+  margin-top: 0.2rem;
+}
+
+.indicacionesBlock strong {
+  display: block;
+  margin-bottom: 0.15rem;
+  color: var(--color-text-secondary);
+}
+
+.indicacionesBlock p {
+  margin: 0;
+  color: var(--color-text);
+  line-height: 1.4;
+}
+
+/* Form Styles */
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.textarea {
+  width: 100%;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 0.6rem 0.8rem;
+  font-size: var(--text-sm);
+  color: var(--color-text);
+  resize: vertical;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.12);
+}
+
+.medicamentoRow {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-lg);
+  padding: var(--space-3);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+  margin-bottom: 0.2rem;
+}
+
+.medInputsGrid {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.medSubGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: var(--space-2);
+}
+
+.btnDangerIcon {
+  background: transparent;
+  border: none;
+  color: #dc2626;
+  padding: 0.5rem;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+  flex-shrink: 0;
+  align-self: flex-end;
+  margin-bottom: 0.2rem;
+}
+
+.btnDangerIcon:hover:not(:disabled) {
+  background: #fee2e2;
+}
+
+.btnDangerIcon:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.inputWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  width: 100%;
+}
+
+.fieldLabel {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  text-align: left;
+}
+
+.btnSecondary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  width: 100%;
+  border: 1px dashed var(--color-border);
+  background: var(--color-surface);
+  padding: 0.6rem;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btnSecondary:hover {
+  background: rgba(124, 58, 237, 0.02);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.btnPrimary {
+  width: 100%;
+  background: var(--color-primary);
+  color: white;
+  border: none;
+  padding: 0.7rem;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: background 0.2s;
+  box-shadow: 0 2px 4px rgba(124, 58, 237, 0.15);
+  margin-top: var(--space-2);
+}
+
+.btnPrimary:hover:not(:disabled) {
+  background: var(--color-primary-dark, #6d28d9);
+}
+
+.btnPrimary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.recetaCardActions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.btnGhostLink {
+  border: none;
+  background: transparent;
+  color: var(--color-primary);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+}
+
+.btnGhostLink:hover {
+  text-decoration: underline;
+}
+
+.btnDangerLink {
+  border: none;
+  background: transparent;
+  color: #dc2626;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+}
+
+.btnDangerLink:hover {
+  text-decoration: underline;
+}
+
+.editWrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-top: var(--space-2);
+}
+
+.editActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-2);
+}
+
+.btnSmallPrimary {
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  background: var(--color-primary);
+  color: white;
+  padding: 0.35rem 0.7rem;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btnSmallPrimary:hover {
+  background: var(--color-primary-dark, #6d28d9);
+}
+
+/* =============================================================================
+   ESTILOS DE IMPRESIÓN OFICIALES CLINICOS (@media print)
+   ============================================================================= */
+.printContainer {
+  display: none; /* Oculto en vista normal de pantalla */
+}
+
+@media print {
+  /* Ocultar la app completa de Next.js */
+  :global(#__next), 
+  :global(#root),
+  :global(body) > *:not(.printContainer):not(#print-area) {
+    display: none !important;
+  }
+
+  body {
+    background: white !important;
+    color: black !important;
+    font-family: 'Times New Roman', Times, serif; /* Formato médico tradicional */
+    margin: 0;
+    padding: 0;
+  }
+
+  .printContainer {
+    display: block !important;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2.5cm;
+    box-sizing: border-box;
+  }
+
+  .printHeader {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .printHeader h2 {
+    margin: 0;
+    font-size: 24pt;
+    font-weight: bold;
+    color: #1a1a1a;
+  }
+
+  .printHeader p {
+    margin: 0.3rem 0 0;
+    font-size: 11pt;
+    color: #555;
+    letter-spacing: 0.1em;
+  }
+
+  .divider {
+    height: 2px;
+    background: #000;
+    margin-top: 1rem;
+  }
+
+  .printTitle {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .printTitle h3 {
+    margin: 0;
+    font-size: 16pt;
+    font-weight: bold;
+    text-decoration: underline;
+    letter-spacing: 0.05em;
+  }
+
+  .printMetaSection {
+    margin-bottom: 2rem;
+    font-size: 12pt;
+    line-height: 1.6;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.3rem;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 1rem;
+  }
+
+  .printMetaSection p {
+    margin: 0;
+  }
+
+  .printBody {
+    margin-bottom: 3.5rem;
+  }
+
+  .printBody h4 {
+    margin: 0 0 1rem;
+    font-size: 13pt;
+    font-weight: bold;
+  }
+
+  .printTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 2rem;
+    font-size: 11pt;
+  }
+
+  .printTable th,
+  .printTable td {
+    border: 1px solid #000;
+    padding: 0.6rem 0.8rem;
+    text-align: left;
+  }
+
+  .printTable th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+  }
+
+  .printIndicaciones {
+    margin-top: 2rem;
+    background: #fdfdfd;
+    padding: 1rem;
+    border-left: 3px solid #000;
+  }
+
+  .printIndicaciones h4 {
+    margin: 0 0 0.5rem;
+    font-size: 12pt;
+  }
+
+  .printIndicaciones p {
+    margin: 0;
+    font-size: 11pt;
+    line-height: 1.5;
+  }
+
+  .printFooter {
+    margin-top: auto;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .signatureBox {
+    text-align: center;
+    width: 250px;
+    margin-top: 4rem;
+  }
+
+  .signatureLine {
+    border-top: 1px solid #000;
+    margin-bottom: 0.5rem;
+  }
+
+  .signatureBox p {
+    margin: 0.15rem 0;
+    font-size: 10pt;
+  }
+}

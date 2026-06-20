@@ -1,13 +1,13 @@
 import type { MeProfile } from './meProfile';
 
-export type AppModule = 'pacientes' | 'especialistas' | 'medicos' | 'citas' | 'consultas' | 'historialclinico' | 'evoluciones' | 'antecedentes';
+export type AppModule = 'pacientes' | 'especialistas' | 'medicos' | 'citas' | 'consultas' | 'historialclinico' | 'evoluciones' | 'recetas' | 'antecedentes';
 export type ClinicalModule = AppModule | 'agenda' | 'dashboard' | 'reportes';
 export type CitasAction = 'crear' | 'reprogramar' | 'cancelar';
 
 const CLINICAL_VIEW_ROLES = new Set(['ADMIN', 'ADMINISTRATIVO', 'MEDICO', 'ESPECIALISTA']);
 const ADMIN_ONLY_ROUTES = new Set(['/dashboard/seguridad-login']);
 const IAM_ADMIN_ROUTES = new Set(['/dashboard/usuarios', '/dashboard/roles', '/dashboard/permisos']);
-const CLINICAL_ROUTES = new Set(['/dashboard', '/dashboard/dashboard', '/dashboard/pacientes', '/dashboard/especialistas', '/dashboard/medicos', '/dashboard/citas', '/dashboard/agenda-medica', '/dashboard/consultas', '/dashboard/reportes', '/dashboard/historial-clinico', '/dashboard/evoluciones', '/dashboard/antecedentes']);
+const CLINICAL_ROUTES = new Set(['/dashboard', '/dashboard/dashboard', '/dashboard/pacientes', '/dashboard/especialistas', '/dashboard/medicos', '/dashboard/citas', '/dashboard/agenda-medica', '/dashboard/consultas', '/dashboard/reportes', '/dashboard/historial-clinico', '/dashboard/evoluciones', '/dashboard/recetas', '/dashboard/antecedentes']);
 const CLINICAL_VIEW_ROLES_BY_MODULE: Record<ClinicalModule, ReadonlySet<string>> = {
   pacientes: CLINICAL_VIEW_ROLES,
   especialistas: CLINICAL_VIEW_ROLES,
@@ -16,6 +16,7 @@ const CLINICAL_VIEW_ROLES_BY_MODULE: Record<ClinicalModule, ReadonlySet<string>>
   consultas: CLINICAL_VIEW_ROLES,
   historialclinico: CLINICAL_VIEW_ROLES,
   evoluciones: CLINICAL_VIEW_ROLES,
+  recetas: CLINICAL_VIEW_ROLES,
   antecedentes: CLINICAL_VIEW_ROLES,
   agenda: CLINICAL_VIEW_ROLES,
   dashboard: CLINICAL_VIEW_ROLES,
@@ -30,6 +31,7 @@ const WRITE_ROLES_BY_MODULE: Record<AppModule, ReadonlySet<string>> = {
   consultas: new Set(['ADMIN', 'MEDICO', 'ESPECIALISTA']),
   historialclinico: new Set(['ADMIN', 'MEDICO']),
   evoluciones: new Set(['ADMIN', 'MEDICO', 'ESPECIALISTA']),
+  recetas: new Set(['ADMIN', 'MEDICO', 'ESPECIALISTA']),
   antecedentes: new Set(['ADMIN', 'MEDICO', 'ESPECIALISTA']),
 };
 
@@ -41,6 +43,7 @@ const VIEW_PERMISSIONS_BY_MODULE: Record<ClinicalModule, string[]> = {
   consultas: ['consultas.listar'],
   historialclinico: ['historialclinico.listar'],
   evoluciones: ['evoluciones.listar'],
+  recetas: ['recetas.listar'],
   antecedentes: ['antecedentes.listar'],
   agenda: ['agenda.ver'],
   dashboard: ['dashboard.ver'],
@@ -55,6 +58,7 @@ const WRITE_PERMISSIONS_BY_MODULE: Record<AppModule, string[]> = {
   consultas: ['consultas.crear'],
   historialclinico: ['historialclinico.archivar'],
   evoluciones: ['evoluciones.crear', 'evoluciones.editar', 'evoluciones.eliminar'],
+  recetas: ['recetas.crear', 'recetas.editar', 'recetas.eliminar'],
   antecedentes: ['antecedentes.crear', 'antecedentes.editar', 'antecedentes.eliminar'],
 };
 
@@ -100,6 +104,7 @@ export function canViewRoute(me: MeProfile | null, href: string, permissionCodes
       '/dashboard/reportes': 'reportes',
       '/dashboard/historial-clinico': 'historialclinico',
       '/dashboard/evoluciones': 'evoluciones',
+      '/dashboard/recetas': 'recetas',
       '/dashboard/antecedentes': 'antecedentes',
     };
     const clinicalModule = byModule[href];

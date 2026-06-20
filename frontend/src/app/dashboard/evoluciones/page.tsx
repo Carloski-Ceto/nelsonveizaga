@@ -95,7 +95,7 @@ export default function EvolucionesPage() {
       params.set('estado', 'ACTIVO'); // Evolutions are typically managed for active histories
       if (searchQuery.trim()) {
         // Assume search is for patient ID or history ID
-        params.set('q', searchQuery.trim());
+        params.set('search', searchQuery.trim());
       }
       
       const res = await api.get<ApiPage<HistorialRow>>(`/api/historial-clinico?${params.toString()}`);
