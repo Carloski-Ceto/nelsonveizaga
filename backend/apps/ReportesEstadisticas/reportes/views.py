@@ -407,7 +407,7 @@ def analizar_reporte_por_voz(request):
     and uses Gemini to generate a natural-language analysis.
     """
     import json
-    import google.generativeai as genai
+    from google import genai as google_genai
     from django.conf import settings as django_settings
 
     transcript = (request.data.get('transcript') or '').strip()
@@ -479,12 +479,20 @@ def analizar_reporte_por_voz(request):
         return Response({'error': 'GEMINI_API_KEY no configurada en el servidor.'}, status=503)
 
     try:
-        genai.configure(api_key=api_key)
-        model = genai.GenerativeModel('gemini-1.5-flash')
-        gemini_response = model.generate_content(prompt)
+        client = google_genai.Client(api_key=api_key)
+        gemini_response = client.models.generate_content(
+            model=django_settings.GEMINI_MODEL,
+            contents=prompt,
+        )
         analisis = gemini_response.text
     except Exception as exc:
-        return Response({'error': f'Error al llamar a Gemini: {str(exc)}'}, status=502)
+        msg = str(exc)
+        if '429' in msg or 'RESOURCE_EXHAUSTED' in msg or 'quota' in msg.lower():
+            return Response(
+                {'error': 'Límite de solicitudes de Gemini alcanzado. Esperá unos segundos e intentá de nuevo.'},
+                status=429,
+            )
+        return Response({'error': f'Error al llamar a Gemini: {msg}'}, status=502)
 
     return Response({
         'analisis': analisis,

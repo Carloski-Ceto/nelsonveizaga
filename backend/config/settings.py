@@ -301,6 +301,7 @@ PASSWORD_RESET_CODE_LENGTH = config(
 # GEMINI AI
 # =============================================================================
 GEMINI_API_KEY = config('GEMINI_API_KEY', default='')
+GEMINI_MODEL   = config('GEMINI_MODEL', default='gemini-2.0-flash')
 
 # =============================================================================
 # LOGGING

@@ -47,7 +47,10 @@ function normalize(v: unknown): string { return v == null ? '' : String(v).toLow
 function apiErr(e: unknown): string {
   const d = (e as { response?: { data?: Record<string, unknown> | string } }).response?.data;
   if (typeof d === 'string') return d;
-  if (d && typeof d === 'object' && typeof d.detail === 'string') return d.detail;
+  if (d && typeof d === 'object') {
+    if (typeof d.detail === 'string') return d.detail;
+    if (typeof d.error === 'string') return d.error;
+  }
   return 'No se pudo cargar reportes.';
 }
 function fmtDateTime(value: string | null): string {
