@@ -26,6 +26,10 @@ class HorarioEspecialistaSerializer(serializers.ModelSerializer):
 
 
 class CitaSerializer(serializers.ModelSerializer):
+    stripe_payment_intent_id = serializers.CharField(
+        write_only=True, required=False, allow_blank=True, default=''
+    )
+
     class Meta:
         model = Cita
         fields = [
@@ -42,6 +46,7 @@ class CitaSerializer(serializers.ModelSerializer):
             'registrado_por',
             'fecha_creacion',
             'fecha_actualizacion',
+            'stripe_payment_intent_id',
         ]
         read_only_fields = [
             'id_cita',
@@ -79,8 +84,26 @@ class CitaSerializer(serializers.ModelSerializer):
         return attrs
 
     def create(self, validated_data):
+        from decimal import Decimal
+
+        from django.conf import settings
+
+        from apps.GestionClinica.pagos.models import PagoCita
+
+        payment_intent_id = validated_data.pop('stripe_payment_intent_id', '')
         validated_data['registrado_por'] = self.context['request'].user
-        return super().create(validated_data)
+        cita = super().create(validated_data)
+
+        if payment_intent_id:
+            monto = Decimal(settings.CITA_PRECIO_CENTAVOS) / 100
+            PagoCita.objects.create(
+                id_cita=cita,
+                stripe_payment_intent_id=payment_intent_id,
+                monto=monto,
+                moneda=settings.CITA_MONEDA,
+                estado='PAGADO',
+            )
+        return cita
 
 
 class CitaReprogramarSerializer(serializers.Serializer):

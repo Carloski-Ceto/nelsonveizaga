@@ -71,6 +71,7 @@ LOCAL_APPS = [
     'apps.ReportesEstadisticas.dashboard',
     'apps.ReportesEstadisticas.reportes',
     'apps.HistorialClinico.historial',  # CU20 Archivar historial clínico
+    'apps.GestionClinica.pagos',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -86,6 +87,7 @@ MIGRATION_MODULES = {
     'citas': 'apps.GestionClinica.citas.migrations',
     'consultas': 'apps.GestionClinica.consultas.migrations',
     'historial_clinico': 'apps.HistorialClinico.historial.migrations',
+    'pagos': 'apps.GestionClinica.pagos.migrations',
 }
 
 # =============================================================================
@@ -302,6 +304,15 @@ PASSWORD_RESET_CODE_LENGTH = config(
 # =============================================================================
 GEMINI_API_KEY = config('GEMINI_API_KEY', default='')
 GEMINI_MODEL   = config('GEMINI_MODEL', default='gemini-2.0-flash')
+
+# =============================================================================
+# STRIPE PAYMENTS
+# =============================================================================
+STRIPE_SECRET_KEY      = config('STRIPE_SECRET_KEY', default='')
+STRIPE_PUBLISHABLE_KEY = config('STRIPE_PUBLISHABLE_KEY', default='')
+STRIPE_WEBHOOK_SECRET  = config('STRIPE_WEBHOOK_SECRET', default='')
+CITA_PRECIO_CENTAVOS   = config('CITA_PRECIO_CENTAVOS', default=5000, cast=int)
+CITA_MONEDA            = config('CITA_MONEDA', default='usd')
 
 # =============================================================================
 # LOGGING

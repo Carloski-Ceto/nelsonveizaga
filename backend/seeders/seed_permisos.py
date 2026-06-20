@@ -63,6 +63,11 @@ PERMISOS = [
     # Dashboard / reportes
     {'codigo': 'dashboard.ver',      'nombre': 'Ver dashboard clínico',  'modulo': 'dashboard'},
     {'codigo': 'reportes.ver',       'nombre': 'Ver reportes clínicos',  'modulo': 'reportes'},
+
+    # Historial clínico
+    {'codigo': 'historialclinico.listar',    'nombre': 'Listar historiales clínicos', 'modulo': 'historialclinico'},
+    {'codigo': 'historialclinico.archivar',  'nombre': 'Archivar historial clínico',  'modulo': 'historialclinico'},
+    {'codigo': 'historialclinico.restaurar', 'nombre': 'Restaurar historial clínico', 'modulo': 'historialclinico'},
 ]
 
 

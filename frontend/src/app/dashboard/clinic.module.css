@@ -31,6 +31,8 @@
 .grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-3); }
 .formActions { margin-top: var(--space-5); padding-top: var(--space-4); border-top: 1px solid var(--color-border-light); display: flex; justify-content: flex-end; gap: var(--space-2); }
 .fieldErr { font-size: var(--text-xs); color: #b91c1c; margin-top: .2rem; }
+.cardWrapper { padding: .62rem .75rem; border-radius: var(--radius-md); border: 1px solid var(--color-border); background: var(--color-surface); }
+.cardHint { font-size: var(--text-xs); color: var(--color-text-muted); margin-top: .35rem; }
 
 @media (max-width: 980px) {
   .toolbar, .grid2 { grid-template-columns: 1fr; }
