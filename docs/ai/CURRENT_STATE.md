@@ -35,6 +35,7 @@
   - `citas`: CRUD base + acciones `POST /api/citas/{id}/reprogramar`, `POST /api/citas/{id}/cancelar`.
   - `agenda`: `GET /api/agenda-medica` (solo lectura por rol médico/admin).
   - `consultas`: CRUD `GET/POST /api/consultas-medicas`.
+  - `evoluciones`: CRUD `GET/POST /api/historial-clinico/{historial_id}/evoluciones`, `GET/PUT/DELETE /api/historial-clinico/{historial_id}/evoluciones/{id}`.
 - **Bitácora:** `GET /api/bitacora/` (lectura; permisos según rol); escritura desde el backend en operaciones que registren eventos.
 - **Seed unificado:** `python manage.py seed` en `apps/core/management/commands/seed.py` — ejecuta `seeders.seed_admin`, `seeders.seed_roles`, `seeders.seed_permisos`, `seeders.seed_rbac_asignaciones`, `seeders.seed_clinica`, `seeders.seed_consultas_demo`, `seeders.seed_dashboard_demo`. Opción `--only admin|roles|permisos|rbac|clinica|consultas-demo|dashboard-demo`.
 - **Seeder clínico (`--only clinica`):** crea datos base idempotentes para demo (usuarios clínicos, especialistas, pacientes, horarios y cita futura).
@@ -45,6 +46,13 @@
 - **Suite de pruebas inicial (backend):** se agregaron pruebas automáticas para política de contraseña, creación de usuario con validación de password y endpoint `/api/auth/permissions` (roles+permisos efectivos).
 
 ## Frontend (Next.js)
+- **Módulo Evoluciones del Paciente (CU15 - 2026-06-20):**
+  - Implementado como una página dedicada independiente en `/dashboard/evoluciones`.
+  - Ofrece un diseño split-screen premium:
+    - Columna izquierda: listado de pacientes con su nombre completo e historiales clínicos activos (buscables por ID/nombre y paginados).
+    - Columna derecha: si no hay selección, muestra un estado vacío instructivo. Si se selecciona un paciente, despliega su nombre completo en la cabecera, sus notas de evolución histórica ordenadas de manera cronológica descendente (con opciones de edición rápida y eliminación inline reguladas por RBAC) y el formulario correspondiente para registrar nuevas evoluciones (validando especialista activo y el estado del expediente).
+  - El serializer `HistorialClinicoSerializer` del backend se extendió para incluir el campo calculado `paciente_nombre_completo` para poblar el nombre del paciente en la UI de Historial Clínico y Evoluciones sin consultas N+1.
+  - El helper `frontend/src/lib/authorization.ts` mapea la ruta `/dashboard/evoluciones` y controla accesos de forma independiente.
 - **Flujo clínico actualizado `usuario -> medico -> especialista` (2026-06-01):**
   - `/dashboard/medicos`: se removieron en UI y payloads los campos `especialidad_principal` y `subespecialidad` en crear/editar/listar; se mantiene `usuario`, `matricula`, `anios_experiencia`, `activo`.
   - `/dashboard/especialistas`: creación ahora toma fuente desde `GET /api/medicos?page=1` (opciones `id_medico`, `nombre_usuario`) y `POST /api/especialistas` envía `id_medico`.
@@ -91,8 +99,8 @@
   - `Recepción Clínica`: puede crear/reprogramar citas, pero no cancelar.
   - `Médico Clínico` y `Especialista Clínico`: no incluyen `kpi.ver` por defecto.
   - `Citas` en frontend ya controla acciones por permiso específico (`citas.crear`, `citas.reprogramar`, `citas.cancelar`).
-- **Visibilidad de navegación por rol (frontend):** `Sidebar` ahora filtra rutas con `canViewRoute(me, href)` desde `frontend/src/lib/authorization.ts`, ocultando entradas no autorizadas (IAM/admin y módulos clínicos para perfiles no clínicos).
-- **Sidebar agrupado por paquetes CU (frontend, 2026-05-30):** navegación reorganizada por secciones: `Reportes y estadísticas`, `Usuarios`, `Gestión clínica`, `Historial clínico` (placeholder "Próximamente"), y `Bitácora`, manteniendo filtros RBAC por ruta (`canViewRoute`).
+- **Visibilidad de navegación por rol (frontend):** `Sidebar` agrupado por paquetes CU (frontend, 2026-06-20): navegación reorganizada por secciones: `Reportes y estadísticas`, `Usuarios`, `Gestión clínica` (incluye Evoluciones), `Historial clínico`, y `Bitácora`, manteniendo filtros RBAC por ruta (`canViewRoute`).
+- **Ubicación de Evoluciones en Sidebar (2026-06-20):** Por requerimiento visual y funcional, el acceso directo a la gestión de Evoluciones clínicas se ubicó bajo el grupo "Gestión clínica", mientras que "Historial clínico" permanece bajo su propia sección independiente "Historial clínico".
 - **Guardas de lectura directa (URL):** `agenda-medica`, `pacientes`, `especialistas`, `citas`, `consultas` y `kpi` validan acceso con `canViewClinicalModule` antes de consultar API.
 - **Endpoints KPI (backend):**
   - `GET /api/dashboard/summary` (headline mensual + distribución de estados + datos tácticos).

@@ -16,6 +16,23 @@ interface HistorialRow {
   registrado_por: number;
   fecha_creacion: string;
   fecha_actualizacion: string;
+  paciente_nombre_completo?: string;
+}
+
+interface EvolucionRow {
+  id_evolucion: number;
+  id_historial: number;
+  id_especialista: number;
+  nota_evolucion: string;
+  registrado_por: number;
+  fecha_creacion: string;
+  fecha_actualizacion: string;
+}
+
+interface EspecialistaOption {
+  id_especialista: number;
+  nombre_usuario: string;
+  especialidad: string;
 }
 
 interface ApiPage<T> {
@@ -105,7 +122,9 @@ export default function HistorialClinicoPage() {
   useEffect(() => {
     if (!modal) return;
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') closeModal();
+      if (event.key === 'Escape') {
+        closeModal();
+      }
     };
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
@@ -243,6 +262,7 @@ export default function HistorialClinicoPage() {
             <tr>
               <th>ID</th>
               <th>Paciente ID</th>
+              <th>Nombre Paciente</th>
               <th>Estado</th>
               <th>Fecha archivo</th>
               <th>Motivo archivo</th>
@@ -253,18 +273,19 @@ export default function HistorialClinicoPage() {
           <tbody>
             {loading && (
               <tr>
-                <td colSpan={7}>Cargando historial clínico...</td>
+                <td colSpan={8}>Cargando historial clínico...</td>
               </tr>
             )}
             {!loading && rows.length === 0 && (
               <tr>
-                <td colSpan={7}>No hay resultados para esos filtros.</td>
+                <td colSpan={8}>No hay resultados para esos filtros.</td>
               </tr>
             )}
             {!loading && rows.map((row) => (
               <tr key={row.id_historial}>
                 <td>{row.id_historial}</td>
                 <td>{row.id_paciente}</td>
+                <td>{row.paciente_nombre_completo || '-'}</td>
                 <td>
                   <span className={`${styles.badge} ${row.estado === 'ACTIVO' ? styles.badgeActive : styles.badgeInactive}`}>
                     {row.estado}

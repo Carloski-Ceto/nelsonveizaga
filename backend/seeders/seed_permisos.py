@@ -60,6 +60,16 @@ PERMISOS = [
     {'codigo': 'consultas.listar',   'nombre': 'Listar consultas',   'modulo': 'consultas'},
     {'codigo': 'consultas.crear',    'nombre': 'Registrar consulta', 'modulo': 'consultas'},
 
+    # Evoluciones
+    {'codigo': 'evoluciones.listar',   'nombre': 'Listar evoluciones',   'modulo': 'evoluciones'},
+    {'codigo': 'evoluciones.crear',    'nombre': 'Crear evolución',      'modulo': 'evoluciones'},
+    {'codigo': 'evoluciones.editar',   'nombre': 'Editar evolución',     'modulo': 'evoluciones'},
+    {'codigo': 'evoluciones.eliminar', 'nombre': 'Eliminar evolución',   'modulo': 'evoluciones'},
+
+    # Historial Clínico
+    {'codigo': 'historialclinico.listar',   'nombre': 'Listar historial clínico',   'modulo': 'historialclinico'},
+    {'codigo': 'historialclinico.archivar', 'nombre': 'Archivar historial clínico', 'modulo': 'historialclinico'},
+
     # Dashboard / reportes
     {'codigo': 'dashboard.ver',      'nombre': 'Ver dashboard clínico',  'modulo': 'dashboard'},
     {'codigo': 'reportes.ver',       'nombre': 'Ver reportes clínicos',  'modulo': 'reportes'},

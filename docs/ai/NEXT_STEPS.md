@@ -24,6 +24,8 @@ Lista priorizada de los siguientes pasos a realizar en el proyecto Oftalmología
 - [ ] Ejecutar `opencode debug config` para validar carga de agentes en runtime local (si CLI disponible en entorno).
 
 ## Corto Plazo
+- [x] Backend: Implementar Caso de Uso "Gestionar evolución del paciente" (CU15) con base de datos, enrutamiento nested, control de acceso RBAC granular (permisos en seeders), logs en bitácora y suite de pruebas unitarias/integración (10/10 pasando).
+- [x] Frontend: Diseñar y conectar interfaz para la evolución del paciente (CU15) anidada bajo el expediente del Historial Clínico.
 - [x] Frontend: conectar módulos clínicos al backend nuevo (pacientes, especialistas, horarios, citas, agenda, consulta) en versión base operativa.
 - [x] Frontend: formularios base para programar/reprogramar/cancelar cita con feedback de error API.
 - [x] Frontend + API: flujo «olvidé contraseña» con código por correo (`/forgot-password`, MailHog en dev); TTL configurable, renovación de vigencia al verificar código, avisos UI tipo «info».
@@ -67,6 +69,7 @@ Lista priorizada de los siguientes pasos a realizar en el proyecto Oftalmología
   - Completado operativo: seeder `rbac` agregado para asignación `rol_permiso` y `usuario_rol`; endpoint validado con permisos no vacíos.
   - Completado de refactor: `DashboardUserContext` ya depende de `/api/auth/permissions` como fuente única.
   - Completado: contrato inicial de permisos clínicos finos (`pacientes.*`, `especialistas.*`, `citas.*`, `consultas.*`, `agenda.ver`, `kpi.ver`) con enforcement explícito en frontend.
+  - Completado: **Sidebar agrupado por paquetes CU (frontend, 2026-06-20):** navegación reorganizada por secciones: `Reportes y estadísticas`, `Usuarios`, `Gestión clínica`, `Historial clínico` (paquete independiente activo), y `Bitácora`, manteniendo filtros RBAC por ruta (`canViewRoute`).
   - Completado: política clínica base por roles dedicados (`Recepción Clínica`, `Médico Clínico`, `Especialista Clínico`) sin mezclar permisos IAM.
   - Completado: recepción sin `citas.cancelar`, y médico/especialista sin `kpi.ver` por defecto.
   - Pendiente: validar con stakeholders si `kpi.ver` debe habilitarse a jefaturas médicas mediante rol adicional (p. ej. `Coordinador Clínico`).

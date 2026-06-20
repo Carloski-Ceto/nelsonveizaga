@@ -472,4 +472,19 @@ def run():
     creados += int(created)
     existentes += int(not created)
 
+    # 6) Historias Clínicas (HistorialClinico) para todos los pacientes
+    from apps.HistorialClinico.historial.models import HistorialClinico, EstadoHistorial
+    admin_user = Usuario.objects.filter(tipo_usuario='ADMIN').first()
+    if admin_user:
+        for p in pacientes:
+            _, created = HistorialClinico.objects.get_or_create(
+                id_paciente=p,
+                defaults={
+                    'estado': EstadoHistorial.ACTIVO,
+                    'registrado_por': admin_user,
+                }
+            )
+            creados += int(created)
+            existentes += int(not created)
+
     return creados, existentes

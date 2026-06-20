@@ -73,3 +73,17 @@ class IsAdministrativoOrAdminCreateMedicoReadClinico(BasePermission):
         if request.method == 'POST':
             return request.user.tipo_usuario in ('ADMIN', 'ADMINISTRATIVO', 'MEDICO')
         return request.user.tipo_usuario in ('ADMIN', 'ADMINISTRATIVO')
+
+
+class IsMedicoOrAdminWriteAdministrativoRead(BasePermission):
+    """Lectura para perfiles clínicos y administrativos; escritura solo para médicos y administradores."""
+
+    message = 'Acceso restringido: escritura exclusiva para médicos/administradores.'
+
+    def has_permission(self, request, view):
+        if not (request.user and request.user.is_authenticated):
+            return False
+        if request.method in SAFE_METHODS:
+            return request.user.tipo_usuario in ('ADMIN', 'ADMINISTRATIVO', 'MEDICO', 'ESPECIALISTA')
+        return request.user.tipo_usuario in ('ADMIN', 'MEDICO', 'ESPECIALISTA')
+

@@ -7,6 +7,7 @@ from rest_framework.test import APIClient
 
 from apps.GestionClinica.citas.models import Cita
 from apps.GestionClinica.especialistas.models import Especialista
+from apps.GestionClinica.medicos.models import Medico
 from apps.GestionClinica.pacientes.models import Paciente
 from apps.Usuarios.users.models import Usuario
 
@@ -45,8 +46,14 @@ class DeletePacienteTests(TestCase):
             tipo_usuario='ESPECIALISTA',
             estado='ACTIVO',
         )
-        return Especialista.objects.create(
+        med = Medico.objects.create(
             id_usuario=u,
+            matricula='MED-PAC-DEL',
+            anios_experiencia=5,
+            activo=True,
+        )
+        return Especialista.objects.create(
+            id_medico=med,
             especialidad='Oftalmologia',
             registro_profesional='RP-PAC-DEL',
             activo=True,

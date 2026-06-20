@@ -253,7 +253,7 @@ def dashboard_citas_drilldown_export(request):
                 c.estado,
                 c.motivo,
                 f'{c.id_paciente.apellidos}, {c.id_paciente.nombres}',
-                f'{c.id_especialista.id_usuario.apellidos}, {c.id_especialista.id_usuario.nombres}',
+                f'{c.id_especialista.id_medico.id_usuario.apellidos}, {c.id_especialista.id_medico.id_usuario.nombres}',
             ]
         )
 

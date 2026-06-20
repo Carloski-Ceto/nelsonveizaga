@@ -3,7 +3,30 @@
 *Sincronización de documentación con el código en repo.*
 
 ## Fecha
-2026-05-30
+2026-06-20
+
+## Actualización rápida (2026-06-20)
+1. **Caso de Uso "Gestionar evolución del paciente" (CU15) implementado en Backend y Frontend:**
+   - **Backend Modular `evoluciones`:**
+     - Creado submódulo `apps.GestionClinica.evoluciones` con el label `evoluciones` y enrutamiento anidado (`/api/historial-clinico/{historial_id}/evoluciones`).
+     - Modelo `EvolucionPaciente` creado con llaves foráneas protegidas (`PROTECT`) hacia `HistorialClinico`, `Especialista` y `Usuario` (registrado_por).
+     - Serializador valida activamente que el expediente (`HistorialClinico`) exista y esté en estado `ACTIVO`, y que el especialista asignado esté `ACTIVO`.
+     - Permiso personalizado `IsMedicoOrAdminWriteAdministrativoRead` que restringe la escritura a personal clínico/admins y autoriza la lectura (GET) a recepción/personal administrativo.
+     - Registro en la bitácora de auditoría para todas las acciones destructivas (`CREAR`, `EDITAR`, `ELIMINAR`).
+     - Permisos granulares de evoluciones registrados en `seed_permisos.py` y asignados a roles en `seed_rbac_asignaciones.py` (idempotente).
+     - **Nombre completo de pacientes en Serializer:** Se agregó `paciente_nombre_completo` a `HistorialClinicoSerializer` en el backend utilizando la relación `select_related('id_paciente')` existente para evitar consultas N+1.
+   - **Frontend Next.js Integrado:**
+     - Modificado `frontend/src/lib/authorization.ts` para registrar la ruta `/dashboard/evoluciones` y mapearla al módulo de `'evoluciones'`.
+     - Creada la página independiente `frontend/src/app/dashboard/evoluciones/page.tsx` y su hoja de estilos `page.module.css` con el layout split-screen para gestionar evoluciones seleccionando el paciente (desplegando nombres completos de pacientes en las tarjetas de selección y cabeceras).
+     - Modificado `frontend/src/app/dashboard/historial-clinico/page.tsx` para eliminar la ventana modal de evoluciones y agregar la columna "Nombre Paciente" en el listado de expedientes.
+     - Verificado con éxito la compilación del frontend (`npm run build`) y el linter (`npm run lint`).
+2. **Suite de pruebas integrales completada:**
+   - Creada suite de pruebas unitarias/integración en `apps/GestionClinica/evoluciones/tests/test_evoluciones.py` (10 casos en total) que validan accesos, validaciones, restricciones RBAC y logs de bitácora.
+3. **Resolución de deuda técnica de pruebas:**
+   - Corregido error `TypeError: Especialista() got unexpected keyword arguments: 'id_usuario'` en los archivos de pruebas de pacientes, reportes y dashboard, ajustando la instanciación de especialistas a la relación correcta `id_medico`.
+   - Corregido `AttributeError` de relación en `apps/ReportesEstadisticas/dashboard/views.py` al acceder a `id_especialista.id_usuario` en lugar de `id_especialista.id_medico.id_usuario`.
+   - Suite de pruebas completa del proyecto al 100% pasando exitosamente (32/32 tests en verde).
+4. **Organización del Sidebar por Módulos:** Se movió la ruta `/dashboard/historial-clinico` a su propio grupo independiente "Historial clínico", y la ruta de `/dashboard/evoluciones` se reubicó bajo el grupo "Gestión clínica" por preferencia operativa del usuario, conservando todos los privilegios RBAC correspondientes.
 
 ## Actualización rápida (2026-06-01)
 1. **Frontend flujo médico-especialista:** especialistas ya no se crean desde usuarios sino desde médicos (`/api/medicos?page=1` -> `id_medico`).

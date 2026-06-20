@@ -8,6 +8,7 @@ import {
   LayoutDashboard, UserCog, ShieldCheck, KeyRound, Activity, LogOut,
   Eye, X, ShieldAlert, UsersRound,
   UserRoundCog, CalendarClock, CalendarDays, Stethoscope, FileText, ClipboardList,
+  TrendingUp,
 } from 'lucide-react';
 import { useDashboardUser } from '@/contexts/DashboardUserContext';
 import { logoutApi } from '@/lib/api';
@@ -46,6 +47,7 @@ const NAV_GROUPS: NavGroup[] = [
       { href: '/dashboard/citas', icon: CalendarClock, label: 'Citas' },
       { href: '/dashboard/agenda-medica', icon: CalendarDays, label: 'Agenda médica' },
       { href: '/dashboard/consultas', icon: Stethoscope, label: 'Consultas' },
+      { href: '/dashboard/evoluciones', icon: TrendingUp, label: 'Evoluciones' },
     ],
   },
   {

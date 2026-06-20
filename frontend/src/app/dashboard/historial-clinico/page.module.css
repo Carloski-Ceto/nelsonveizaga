@@ -340,7 +340,8 @@
     justify-content: flex-start;
   }
 
-  .grid2 {
+  .grid2,
+  .splitGrid {
     grid-template-columns: 1fr;
   }
 }
@@ -350,3 +351,111 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Evoluciones Styles */
+.modalPanelLarge {
+  width: min(64rem, 100%);
+  max-height: 90vh;
+  overflow: auto;
+  background: var(--color-surface);
+  border-radius: var(--radius-xl);
+  border: 1px solid rgba(124, 58, 237, 0.2);
+  box-shadow: var(--shadow-purple-lg);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+}
+
+.splitGrid {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: var(--space-5);
+  margin-top: var(--space-3);
+}
+
+.evoList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  max-height: 55vh;
+  overflow-y: auto;
+  padding-right: var(--space-2);
+}
+
+.evoCard {
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid var(--color-border-light);
+  border-left: 3px solid var(--color-primary);
+  border-radius: var(--radius-md);
+  padding: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  position: relative;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.evoCard:hover {
+  background: rgba(255, 255, 255, 1);
+  border-color: rgba(124, 58, 237, 0.3);
+}
+
+.evoCardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-2);
+  border-bottom: 1px dashed var(--color-border-light);
+  padding-bottom: 0.25rem;
+}
+
+.evoMeta {
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+}
+
+.evoEspecialistaName {
+  font-weight: 700;
+  color: var(--color-primary-800);
+}
+
+.evoDate {
+  color: var(--color-text-muted);
+  margin-left: 0.5rem;
+}
+
+.evoNote {
+  font-size: var(--text-sm);
+  color: var(--color-text);
+  white-space: pre-wrap;
+  line-height: 1.5;
+}
+
+.evoCardActions {
+  display: flex;
+  gap: var(--space-1);
+}
+
+.evoForm {
+  background: rgba(124, 58, 237, 0.02);
+  border: 1px dashed rgba(124, 58, 237, 0.2);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  height: fit-content;
+  position: sticky;
+  top: 0;
+}
+
+.evoNotice {
+  background: rgba(124, 58, 237, 0.05);
+  border: 1px solid rgba(124, 58, 237, 0.15);
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--text-sm);
+  color: var(--color-primary-800);
+  line-height: 1.4;
+}
+

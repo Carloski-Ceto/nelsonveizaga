@@ -9,6 +9,8 @@ from .models import EstadoHistorial, HistorialClinico
 
 
 class HistorialClinicoSerializer(serializers.ModelSerializer):
+    paciente_nombre_completo = serializers.SerializerMethodField()
+
     class Meta:
         model = HistorialClinico
         fields = '__all__'
@@ -20,6 +22,9 @@ class HistorialClinicoSerializer(serializers.ModelSerializer):
             'fecha_creacion',
             'fecha_actualizacion',
         ]
+
+    def get_paciente_nombre_completo(self, obj):
+        return f"{obj.id_paciente.nombres} {obj.id_paciente.apellidos}"
 
     def create(self, validated_data):
         validated_data['registrado_por'] = self.context['request'].user

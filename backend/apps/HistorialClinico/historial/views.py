@@ -10,7 +10,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from apps.bitacora.models import AccionBitacora
-from apps.core.permissions import IsMedicoOrAdmin
+from apps.core.permissions import IsMedicoOrAdminWriteAdministrativoRead
 from apps.core.utils import get_client_ip, registrar_bitacora
 
 from .models import HistorialClinico
@@ -26,7 +26,7 @@ class HistorialClinicoViewSet(viewsets.ModelViewSet):
         'id_paciente', 'archivado_por', 'registrado_por'
     ).all()
     serializer_class = HistorialClinicoSerializer
-    permission_classes = [IsAuthenticated, IsMedicoOrAdmin]
+    permission_classes = [IsAuthenticated, IsMedicoOrAdminWriteAdministrativoRead]
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_fields = ['id_paciente', 'estado']
     search_fields = ['id_paciente__nombres', 'id_paciente__apellidos']

@@ -10,6 +10,27 @@ Este archivo documenta todas las decisiones técnicas arquitectónicas important
 
 ---
 
+### Registro 64
+
+**Fecha:** 2026-06-20
+**Decisión:** Registrar y asignar permisos explícitos de `historialclinico` (`historialclinico.listar` y `historialclinico.archivar`) en seeders y permitir el acceso de lectura al rol de Recepción (`ADMINISTRATIVO`) a través del permiso `IsMedicoOrAdminWriteAdministrativoRead` en `HistorialClinicoViewSet`.
+**Motivo:** Se detectó un problema en el cual la barra lateral (Sidebar) no mostraba el enlace de "Historial clínico" a ningún usuario, ya que el sistema verifica permisos granulares y la base de datos de permisos carecía de entradas para `historialclinico`. Además, para que el rol de Recepción (ADMINISTRATIVO) pueda ver las evoluciones del paciente, este rol necesita listar y consultar el historial clínico (que sirve como punto de acceso).
+**Impacto:** Registro en `seed_permisos.py` y mapeo en `seed_rbac_asignaciones.py` para asignar los permisos a los roles correspondientes. Actualización de `HistorialClinicoViewSet` en backend para admitir lectura para administrativos (`IsMedicoOrAdminWriteAdministrativoRead`) y actualización de `frontend/src/lib/authorization.ts` para autorizar a Receptionist a visualizar el módulo de historial clínico.
+
+### Registro 63
+
+**Fecha:** 2026-06-20
+**Decisión:** Diseñar e integrar la interfaz de usuario para "Gestionar evolución del paciente (CU15)" en Next.js utilizando un diseño dividido (Split Layout) y edición/eliminación inline de notas históricas.
+**Motivo:** Se optó por una interfaz de pantalla ancha que permite visualizar cronológicamente el listado de evoluciones registradas del paciente en el lado izquierdo, y en el lado derecho disponer de un formulario estático/fijo para registrar una nueva nota clínico-médica. Esto proporciona un excelente flujo de trabajo clínico reduciendo los clics. La edición inline simplifica las correcciones rápidas. Se restringieron las acciones de escritura en el cliente basándose en permisos RBAC del usuario y se implementó un banner visual informativo si el historial clínico está archivado.
+**Impacto:** Modificación de `frontend/src/lib/authorization.ts` para registrar los permisos de evoluciones y mapear permisos a los roles clínicos/recepción. Modificación de `frontend/src/app/dashboard/historial-clinico/page.tsx` para incorporar el modal dividido, estados de manipulación de notas y catálogo de especialistas para resolución de nombres. Modificación de `frontend/src/app/dashboard/historial-clinico/page.module.css` para añadir clases de maquetación del modal de gran escala, tarjetas de notas y badges. Todo el código pasa linter y build de Next.js sin errores ni advertencias.
+
+### Registro 62
+
+**Fecha:** 2026-06-20
+**Decisión:** Crear la aplicación modular `evoluciones` bajo `apps.GestionClinica` utilizando URLs anidadas bajo `/api/historial-clinico/{historial_id}/evoluciones` e implementar el permiso DRF `IsMedicoOrAdminWriteAdministrativoRead`.
+**Motivo:** Asegurar la consistencia del dominio clínico vinculando de manera mandatoria cada nota de evolución a un expediente (historial clínico) activo. El enrutamiento anidado previene fugas de datos y corrupción de estado de base de datos. El nuevo permiso permite dar soporte al rol de recepción (ADMINISTRATIVO) para lectura histórica y restinge la escritura únicamente a personal médico (MEDICO/ESPECIALISTA) y administradores (ADMIN).
+**Impacto:** Nuevo modelo `EvolucionPaciente` con borrado protegido y constraints de unicidad; validación en serializador; registro en bitácora para todas las modificaciones físicas; permisos integrados en seeders y asignaciones de roles clínicos.
+
 ### Registro 60
 
 **Fecha:** 2026-05-31

@@ -8,6 +8,7 @@ from rest_framework.test import APIClient
 from apps.GestionClinica.citas.models import Cita
 from apps.GestionClinica.consultas.models import ConsultaMedica
 from apps.GestionClinica.especialistas.models import Especialista
+from apps.GestionClinica.medicos.models import Medico
 from apps.GestionClinica.pacientes.models import Paciente
 from apps.Usuarios.users.models import Usuario
 
@@ -35,8 +36,14 @@ class ReportesEndpointsTests(TestCase):
             tipo_usuario='ESPECIALISTA',
             estado='ACTIVO',
         )
-        self.especialista = Especialista.objects.create(
+        medico = Medico.objects.create(
             id_usuario=especialista_user,
+            matricula='MED-REP-001',
+            anios_experiencia=5,
+            activo=True,
+        )
+        self.especialista = Especialista.objects.create(
+            id_medico=medico,
             especialidad='Oftalmologia',
             registro_profesional='RP-REP-001',
             activo=True,
