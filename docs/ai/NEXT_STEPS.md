@@ -3,6 +3,22 @@
 Lista priorizada de los siguientes pasos a realizar en el proyecto Oftalmología SI1.
 
 ## Inmediato
+- [x] CU17: permitir editar la misma receta emitida, incluido cambiar `ANTEOJOS`/`CONTACTO`/`AMBOS`, sin habilitar una segunda receta para la misma consulta.
+- [x] CU17: agregar permiso `recetas_opticas.editar`, bitácora y UI de edición/cancelación.
+- [ ] Ejecutar `seed --only rbac`, renovar sesión y probar editar como especialista asignado y como administrador.
+- [ ] Ejecutar suite backend de recetas ópticas cuando Docker responda y validar manualmente editar -> imprimir.
+- [x] CU17 frontend: corregir recorte de campos/descripciones y mostrar indicaciones/observaciones en historial e impresión.
+- [ ] CU17 frontend: comprobar visualmente el ajuste en los mismos anchos de las capturas y en móvil.
+- [x] Crear seeder reproducible `cu17-demo` con consulta y refracción pendiente de receta.
+- [x] Ejecutar `seed --only cu17-demo` y validar el flujo manual de emisión CU17 (confirmado por el usuario).
+- [ ] Ejecutar las pruebas de `test_seed_cu17_demo` y la suite completa de recetas ópticas.
+- [x] Corregir autorización transitoria de Citas y asignación RBAC para todas las cuentas `ADMIN`.
+- [ ] Ejecutar `seed --only rbac`, renovar sesión y verificar que ADMIN pueda listar/programar citas.
+- [ ] Completar prueba manual CU17: cita -> consulta con refracción CU13 -> receta óptica.
+- [x] Backend CU17: implementar modelos, servicio transaccional, API nested, permisos especialista/admin, migración inicial y pruebas escritas.
+- [ ] Backend CU17: ejecutar `makemigrations --check --dry-run`, migración y suite `recetas_opticas` cuando se autorice levantar el entorno.
+- [x] Frontend CU17: alinear formulario con contrato backend definitivo (solo ESPECIALISTA/ADMIN; marca/modelo de contacto; manejo de lectura administrativa), pendiente de validación runtime.
+- [ ] CU17 integrado: instalar dependencias frontend, ejecutar migración/tests backend, seed RBAC, build frontend y prueba manual por actor.
 - [x] Ajustar flujo frontend `usuario -> medico -> especialista`: especialistas se crean desde `id_medico` y módulo médicos elimina campos `especialidad_principal/subespecialidad` en UI.
 - [x] Corregir imports backend tras reestructuración (`backend.apps.*` -> `apps.*`) y validar en Docker (`check`, `showmigrations`, `makemigrations --check --dry-run`, `seed --only admin`).
 - [x] Consolidar sistema multi-agente en **OpenCode** (`.opencode/agents/`) y retirar configuración paralela Cursor para evitar deriva.

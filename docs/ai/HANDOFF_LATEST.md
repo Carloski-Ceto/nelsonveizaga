@@ -1,9 +1,55 @@
 # HANDOFF LATEST
 
+## Edición de recetas ópticas (2026-06-22)
+1. `POST` sigue emitiendo una única receta por consulta; `PUT/PATCH` corrige esa misma receta y `DELETE` sigue en `405`.
+2. La edición puede cambiar entre anteojos, contacto o ambos. El backend sustituye atómicamente los detalles para evitar datos incompatibles residuales.
+3. No se permite cambiar consulta, historial, emisor ni fecha de emisión. Un especialista solo puede modificar recetas de consultas asignadas; `ADMIN` puede corregirlas.
+4. El frontend ofrece `Editar`, precarga valores, bloquea la consulta y permite cancelar. Los permisos `crear` y `editar` se evalúan por separado.
+5. Aplicar RBAC en bases existentes con `python manage.py seed --only rbac` y renovar la sesión.
+6. ESLint focalizado: OK. Pendientes: suite Django por Docker (daemon sin respuesta), build Next (timeout compilando) y TypeScript global (errores preexistentes en Reportes).
+
+## Ajuste visual CU17 (2026-06-22)
+1. El formulario ya no fuerza cuatro campos dentro de una columna angosta: usa una cuadrícula adaptable y contenedores con `min-width: 0`.
+2. Las descripciones de Anteojos/Contacto se ubican debajo del encabezado para evitar recortes.
+3. Cada receta histórica muestra indicaciones generales y observaciones por ojo únicamente cuando contienen texto.
+4. La receta imprimible también incluye indicaciones y observaciones.
+5. No se levantaron servicios ni se ejecutó build en esta sesión; el usuario ya había confirmado el flujo CU17 con el seeder demo.
+
+## Seeder CU17 demo (2026-06-22)
+1. Nuevo seeder `seeders.seed_cu17_demo` registrado como `--only cu17-demo`.
+2. Paciente visible: `Paciente Demo CU17`, documento `CU17-DEMO-001`.
+3. Genera historial activo, cita atendida y consulta con CU13 completo; no genera receta.
+4. Es reutilizable: no duplica una consulta pendiente y crea reconsulta nueva después de consumir la anterior.
+5. El usuario confirmó que el seeder y el flujo CU17 funcionan en su entorno.
+
+## Corrección de prerrequisito CU17 (2026-06-21)
+1. Diagnosticado falso estado de “sin permiso” en Citas mientras el perfil aún estaba cargando.
+2. Citas ahora difiere carga, avisos y habilitación del botón hasta finalizar `DashboardUserContext.loading`.
+3. RBAC administrativo dejó de depender del username demo: todo usuario `ADMIN` recibe `Administrador del Sistema` al ejecutar el seeder.
+4. Para aplicar en una base existente: ejecutar `python manage.py seed --only rbac` y volver a iniciar sesión.
+
+## Actualización rápida (2026-06-21 - CU17 frontend)
+1. Frontend CU17 reorganizado dentro de `dashboard/recetas-opticas` con dominio y formulario por ojo separados.
+2. Emisión visible únicamente para `ESPECIALISTA` y `ADMIN`; `MEDICO` y `ADMINISTRATIVO` quedan en lectura.
+3. La lectura de recetas ya no depende del permiso para listar consultas, evitando el fallo administrativo por `403`.
+4. Contacto solicita curva base, diámetro, marca y modelo; material y reemplazo son opcionales. Anteojos solicita DP monocular y permite prisma/base.
+5. ESF/CIL/EJE se precargan desde CU13 y pueden confirmarse o ajustarse antes de emitir.
+6. Historial, impresión, estados vacío/carga/error/éxito, responsive y accesibilidad quedaron actualizados.
+7. No se levantó el entorno. El host aún no tiene `frontend/node_modules`; por ello el editor no encuentra `@types/react` y muestra errores JSX en cascada hasta instalar dependencias.
+
 *Sincronización de documentación con el código en repo.*
 
 ## Fecha
-2026-06-20
+2026-06-21
+
+## Actualización rápida (2026-06-21 - CU17 backend)
+1. Creado el módulo `apps.GestionClinica.recetas_opticas` con `RecetaOptica` y `DetalleRecetaOptica`.
+2. Una consulta puede tener cero o una receta; una reconsulta futura crea otra receta sin sobrescribir la anterior.
+3. Se soportan anteojos, contacto o ambos mediante detalles por `tipo_correccion + ojo`.
+4. CU13 es requisito y fuente de precarga, pero la prescripción final se conserva como snapshot independiente.
+5. Solo el especialista asignado a la consulta y el administrador pueden emitir; perfiles restantes conservan lectura clínica.
+6. Agregados servicio atómico, API nested, auditoría, RBAC, migración inicial escrita y 12 pruebas estáticas.
+7. No se levantó el proyecto: siguen pendientes ejecución de migración/tests/checks y ajuste posterior del frontend al contrato definitivo (`marca`, `modelo` y permisos).
 
 ## Actualización rápida (2026-06-20 - recetas)
 1. **Caso de Uso "Emitir receta de medicamentos" (CU16) implementado en Backend y Frontend:**

@@ -46,6 +46,7 @@ SEEDERS = {
     'rbac': ('seeders.seed_rbac_asignaciones', 'Asignaciones RBAC (rol_permiso + usuario_rol)'),
     'clinica':  ('seeders.seed_clinica',  'Datos base clínicos (pacientes/especialistas/citas)'),
     'consultas-demo': ('seeders.seed_consultas_demo', 'Consultas demo (marca citas atendidas)'),
+    'cu17-demo': ('seeders.seed_cu17_demo', 'Escenario CU17 con refraccion pendiente de receta'),
     'dashboard-demo': ('seeders.seed_dashboard_demo', 'Datos demo de volumen para dashboard'),
 }
 

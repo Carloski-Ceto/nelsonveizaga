@@ -1,13 +1,13 @@
 import type { MeProfile } from './meProfile';
 
-export type AppModule = 'pacientes' | 'especialistas' | 'medicos' | 'citas' | 'consultas' | 'historialclinico' | 'evoluciones' | 'recetas' | 'antecedentes';
+export type AppModule = 'pacientes' | 'especialistas' | 'medicos' | 'citas' | 'consultas' | 'historialclinico' | 'evoluciones' | 'recetas' | 'recetas_opticas' | 'antecedentes';
 export type ClinicalModule = AppModule | 'agenda' | 'dashboard' | 'reportes';
 export type CitasAction = 'crear' | 'reprogramar' | 'cancelar';
 
 const CLINICAL_VIEW_ROLES = new Set(['ADMIN', 'ADMINISTRATIVO', 'MEDICO', 'ESPECIALISTA']);
 const ADMIN_ONLY_ROUTES = new Set(['/dashboard/seguridad-login']);
 const IAM_ADMIN_ROUTES = new Set(['/dashboard/usuarios', '/dashboard/roles', '/dashboard/permisos']);
-const CLINICAL_ROUTES = new Set(['/dashboard', '/dashboard/dashboard', '/dashboard/pacientes', '/dashboard/especialistas', '/dashboard/medicos', '/dashboard/citas', '/dashboard/agenda-medica', '/dashboard/consultas', '/dashboard/reportes', '/dashboard/historial-clinico', '/dashboard/evoluciones', '/dashboard/recetas', '/dashboard/antecedentes']);
+const CLINICAL_ROUTES = new Set(['/dashboard', '/dashboard/dashboard', '/dashboard/pacientes', '/dashboard/especialistas', '/dashboard/medicos', '/dashboard/citas', '/dashboard/agenda-medica', '/dashboard/consultas', '/dashboard/reportes', '/dashboard/historial-clinico', '/dashboard/evoluciones', '/dashboard/recetas', '/dashboard/recetas-opticas', '/dashboard/antecedentes']);
 const CLINICAL_VIEW_ROLES_BY_MODULE: Record<ClinicalModule, ReadonlySet<string>> = {
   pacientes: CLINICAL_VIEW_ROLES,
   especialistas: CLINICAL_VIEW_ROLES,
@@ -17,6 +17,7 @@ const CLINICAL_VIEW_ROLES_BY_MODULE: Record<ClinicalModule, ReadonlySet<string>>
   historialclinico: CLINICAL_VIEW_ROLES,
   evoluciones: CLINICAL_VIEW_ROLES,
   recetas: CLINICAL_VIEW_ROLES,
+  recetas_opticas: CLINICAL_VIEW_ROLES,
   antecedentes: CLINICAL_VIEW_ROLES,
   agenda: CLINICAL_VIEW_ROLES,
   dashboard: CLINICAL_VIEW_ROLES,
@@ -32,6 +33,7 @@ const WRITE_ROLES_BY_MODULE: Record<AppModule, ReadonlySet<string>> = {
   historialclinico: new Set(['ADMIN', 'MEDICO']),
   evoluciones: new Set(['ADMIN', 'MEDICO', 'ESPECIALISTA']),
   recetas: new Set(['ADMIN', 'MEDICO', 'ESPECIALISTA']),
+  recetas_opticas: new Set(['ADMIN', 'ESPECIALISTA']),
   antecedentes: new Set(['ADMIN', 'MEDICO', 'ESPECIALISTA']),
 };
 
@@ -44,6 +46,7 @@ const VIEW_PERMISSIONS_BY_MODULE: Record<ClinicalModule, string[]> = {
   historialclinico: ['historialclinico.listar'],
   evoluciones: ['evoluciones.listar'],
   recetas: ['recetas.listar'],
+  recetas_opticas: ['recetas_opticas.listar'],
   antecedentes: ['antecedentes.listar'],
   agenda: ['agenda.ver'],
   dashboard: ['dashboard.ver'],
@@ -59,6 +62,7 @@ const WRITE_PERMISSIONS_BY_MODULE: Record<AppModule, string[]> = {
   historialclinico: ['historialclinico.archivar'],
   evoluciones: ['evoluciones.crear', 'evoluciones.editar', 'evoluciones.eliminar'],
   recetas: ['recetas.crear', 'recetas.editar', 'recetas.eliminar'],
+  recetas_opticas: ['recetas_opticas.crear', 'recetas_opticas.editar'],
   antecedentes: ['antecedentes.crear', 'antecedentes.editar', 'antecedentes.eliminar'],
 };
 
@@ -81,9 +85,24 @@ function hasEffectivePermission(permissionCodes: Set<string> | undefined, module
 
 export function canWriteModule(me: MeProfile | null, module: AppModule, permissionCodes?: Set<string>): boolean {
   if (!me) return false;
+  // CU17 es una excepción clínica deliberada: un permiso mal asignado no debe
+  // habilitar su emisión a un médico general desde la interfaz.
+  if (module === 'recetas_opticas' && !WRITE_ROLES_BY_MODULE.recetas_opticas.has(me.tipo_usuario)) {
+    return false;
+  }
   const byPermission = hasEffectivePermission(permissionCodes, module, 'write');
   if (byPermission != null) return byPermission;
   return WRITE_ROLES_BY_MODULE[module].has(me.tipo_usuario);
+}
+
+export function canWriteOpticalPrescription(
+  me: MeProfile | null,
+  action: 'crear' | 'editar',
+  permissionCodes?: Set<string>,
+): boolean {
+  if (!me || !WRITE_ROLES_BY_MODULE.recetas_opticas.has(me.tipo_usuario)) return false;
+  if (!permissionCodes || permissionCodes.size === 0) return true;
+  return permissionCodes.has(`recetas_opticas.${action}`);
 }
 
 export function canViewRoute(me: MeProfile | null, href: string, permissionCodes?: Set<string>): boolean {
@@ -105,6 +124,7 @@ export function canViewRoute(me: MeProfile | null, href: string, permissionCodes
       '/dashboard/historial-clinico': 'historialclinico',
       '/dashboard/evoluciones': 'evoluciones',
       '/dashboard/recetas': 'recetas',
+      '/dashboard/recetas-opticas': 'recetas_opticas',
       '/dashboard/antecedentes': 'antecedentes',
     };
     const clinicalModule = byModule[href];
