@@ -1,9 +1,41 @@
 # CURRENT STATE
 
+## Edición de recetas ópticas emitidas (2026-06-22)
+- La receta ya emitida puede corregirse mediante `PUT/PATCH /api/historial-clinico/{historial_id}/recetas-opticas/{id}` sin crear otra receta ni consumir otra consulta.
+- Se pueden modificar indicaciones, graduación, datos de producto y el tipo `ANTEOJOS`/`CONTACTO`/`AMBOS`; consulta, historial, emisor y fecha de emisión permanecen inmutables.
+- El reemplazo de detalles se ejecuta en una transacción con bloqueo de fila. `POST` conserva la restricción de una receta por consulta y `DELETE` continúa deshabilitado.
+- Solo `ADMIN` o el `ESPECIALISTA` asignado pueden editar. Se agregó `recetas_opticas.editar` y auditoría `EDITAR` en bitácora.
+- Frontend: modo de edición sobre el mismo formulario, precarga de la receta, cambio de tipo conservando datos compatibles, consulta bloqueada, cancelación y feedback accesible.
+- Validación: ESLint focalizado aprobó. Build Next quedó bloqueado en compilación; TypeScript global está bloqueado por errores preexistentes de `SpeechRecognition` en Reportes; Docker no respondió antes del timeout y la suite backend queda pendiente de ejecución.
+
+## Ajuste visual CU17 (2026-06-22)
+- Corregido el desbordamiento horizontal del formulario de recetas ópticas: columnas principal/formulario y cuadrículas de campos ahora se adaptan al ancho disponible sin recortar controles.
+- Las ayudas de Anteojos y Lentes de contacto se muestran debajo de su título y permiten salto de línea completo.
+- El historial de recetas emitidas muestra condicionalmente indicaciones generales y observaciones por tipo de corrección/ojo; la versión imprimible conserva la misma información.
+- El usuario confirmó el flujo CU17 operativo con el seeder demo. Este ajuste frontend queda pendiente de comprobación visual posterior, sin levantar servicios en esta sesión.
+
+## Seeder CU17 demo (2026-06-22, implementación estática)
+- Registrado `python manage.py seed --only cu17-demo` para garantizar un paciente con historial activo, cita atendida y consulta con refracción OD/OI pendiente de receta óptica.
+- El escenario reutiliza una consulta mientras siga sin receta; después de emitir, una nueva ejecución crea una reconsulta sin sobrescribir el historial.
+- Agregadas dos pruebas unitarias del seeder. El usuario confirmó que el escenario demo funciona; la ejecución automatizada de esas pruebas no se verificó en esta sesión.
+
+## Prerrequisito CU17 — permisos de Citas (2026-06-21, corrección estática)
+- La pantalla de Citas ahora espera a que `DashboardUserContext` termine de resolver perfil y permisos antes de mostrar denegaciones o cargar datos.
+- El seeder RBAC asigna `Administrador del Sistema` a todos los usuarios con `tipo_usuario=ADMIN`, sin depender de un username concreto.
+- Pendiente ejecutar `seed --only rbac`, renovar la sesión y validar el flujo cita -> consulta con CU13 -> receta óptica.
+
+## Frontend CU17 (2026-06-21, implementación estática)
+- Módulo `frontend/src/app/dashboard/recetas-opticas/` alineado con el contrato backend final: lectura clínica general y emisión solo para `ESPECIALISTA` o `ADMIN`.
+- Flujo paciente -> historial inmutable -> consulta con refracción -> anteojos/contacto/ambos; precarga ESF/CIL/EJE desde CU13 y captura campos específicos de cada corrección.
+- Carga de recetas desacoplada de consultas para que perfiles de solo lectura no fallen por un `403` del endpoint de consultas.
+- Agregados formulario componentizado por ojo, campos de prisma/base, marca/modelo/material/reemplazo, validaciones HTML, feedback accesible, responsive e impresión clínica completa.
+- Pendiente validación runtime: build/lint frontend, migración y tests backend, seed RBAC y prueba integrada por roles.
+
 ## Estado actual del proyecto
 **Oftalmología SI1 — Clínica de Ojos Norte.** Backend Django + frontend Next.js (panel web IAM y auditoría). Modelo SI1: paciente = datos sin login; sin app móvil; sin registro público.
 
 ## Backend
+- **CU17 recetas ópticas (2026-06-21, implementación estática):** creado `apps.GestionClinica.recetas_opticas` con modelos de cabecera/detalle, relación `ConsultaMedica 1 -> 0..1 RecetaOptica`, historial inmutable por reconsulta, API nested de creación/lectura, servicio transaccional, bitácora, migración inicial escrita, constraints clínicos y suite de 12 pruebas. Solo `ESPECIALISTA` asignado a la consulta o `ADMIN` puede emitir; `MEDICO` no puede crear. Pendiente ejecutar migración, tests y `makemigrations --check` cuando se autorice levantar el entorno.
 - **Fix imports por reestructuración de paquetes (2026-06-01):** se reemplazaron imports inválidos `from backend.apps...` por `from apps...` en todo `backend/`, alineando dominios `apps.Usuarios.*`, `apps.GestionClinica.*`, `apps.ReportesEstadisticas.*` sin cambios de lógica.
 - **Validación en Docker (2026-06-01):** `manage.py check` OK, `showmigrations` sin pendientes, `makemigrations --check --dry-run` sin cambios detectados, `seed --only admin` idempotente (0 creados, 1 existente).
 - **Bootstrap automático en contenedor backend (2026-05-31):** `entrypoint.sh` ahora ejecuta automáticamente `migrate` y `seed` al iniciar el contenedor (controlado por envs `AUTO_MIGRATE` y `AUTO_SEED`, ambos `true` por defecto en `docker-compose.yml`).

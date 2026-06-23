@@ -26,6 +26,7 @@ ROLE_PERMISSION_CODES = {
         'consultas.listar', 'consultas.crear',
         'evoluciones.listar', 'evoluciones.crear', 'evoluciones.editar', 'evoluciones.eliminar',
         'recetas.listar', 'recetas.crear', 'recetas.editar', 'recetas.eliminar',
+        'recetas_opticas.listar', 'recetas_opticas.crear', 'recetas_opticas.editar',
         'antecedentes.listar', 'antecedentes.crear', 'antecedentes.editar', 'antecedentes.eliminar',
         'historialclinico.listar', 'historialclinico.archivar',
         'dashboard.ver',
@@ -55,6 +56,7 @@ ROLE_PERMISSION_CODES = {
         'agenda.ver',
         'evoluciones.listar',
         'recetas.listar',
+        'recetas_opticas.listar',
         'antecedentes.listar',
         'historialclinico.listar',
         'dashboard.ver',
@@ -69,6 +71,7 @@ ROLE_PERMISSION_CODES = {
         'consultas.listar', 'consultas.crear',
         'evoluciones.listar', 'evoluciones.crear', 'evoluciones.editar',
         'recetas.listar', 'recetas.crear', 'recetas.editar',
+        'recetas_opticas.listar',
         'antecedentes.listar', 'antecedentes.crear', 'antecedentes.editar',
         'historialclinico.listar', 'historialclinico.archivar',
     ],
@@ -81,6 +84,7 @@ ROLE_PERMISSION_CODES = {
         'consultas.listar', 'consultas.crear',
         'evoluciones.listar', 'evoluciones.crear', 'evoluciones.editar',
         'recetas.listar', 'recetas.crear', 'recetas.editar',
+        'recetas_opticas.listar', 'recetas_opticas.crear', 'recetas_opticas.editar',
         'antecedentes.listar', 'antecedentes.crear', 'antecedentes.editar',
         'historialclinico.listar',
         'reportes.ver',
@@ -129,7 +133,11 @@ def run():
                 row.delete()
 
     # 2) Sincronizar roles de usuarios base (sin mezcla IAM-clínico accidental)
-    for username, role_names in USER_ROLE_NAMES.items():
+    user_role_names = dict(USER_ROLE_NAMES)
+    for username in Usuario.objects.filter(tipo_usuario='ADMIN').values_list('username', flat=True):
+        user_role_names[username] = ['Administrador del Sistema']
+
+    for username, role_names in user_role_names.items():
         try:
             user = Usuario.objects.get(username=username)
         except Usuario.DoesNotExist:

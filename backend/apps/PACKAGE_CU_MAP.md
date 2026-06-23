@@ -21,7 +21,7 @@ Alias lógico: `apps/Usuarios/*`
 - CU14 Registrar diagnóstico -> `apps.consultas`
 - CU15 Registrar evolución del paciente -> `apps.GestionClinica.evoluciones`
 - CU16 Emitir receta de medicamentos -> `apps.GestionClinica.recetas`
-- CU17 Emitir receta de lentes/contacto -> **pendiente módulo dedicado**
+- CU17 Emitir receta de lentes/contacto -> `apps.GestionClinica.recetas_opticas` (backend implementado; validación runtime y frontend pendientes)
 
 Alias lógico: `apps/GestionClinica/*`
 

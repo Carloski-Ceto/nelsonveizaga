@@ -49,6 +49,7 @@ const NAV_GROUPS: NavGroup[] = [
       { href: '/dashboard/consultas', icon: Stethoscope, label: 'Consultas' },
       { href: '/dashboard/evoluciones', icon: TrendingUp, label: 'Evoluciones' },
       { href: '/dashboard/recetas', icon: FileText, label: 'Emitir Recetas' },
+      { href: '/dashboard/recetas-opticas', icon: Eye, label: 'Recetas ópticas' },
     ],
   },
   {

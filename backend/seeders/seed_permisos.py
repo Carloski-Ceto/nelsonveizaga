@@ -72,6 +72,11 @@ PERMISOS = [
     {'codigo': 'recetas.editar',   'nombre': 'Editar receta médica',     'modulo': 'recetas'},
     {'codigo': 'recetas.eliminar', 'nombre': 'Eliminar receta médica',   'modulo': 'recetas'},
 
+    # Recetas ópticas (consulta/emisión/corrección; sin eliminación)
+    {'codigo': 'recetas_opticas.listar', 'nombre': 'Listar recetas ópticas', 'modulo': 'recetas_opticas'},
+    {'codigo': 'recetas_opticas.crear',  'nombre': 'Emitir receta óptica',   'modulo': 'recetas_opticas'},
+    {'codigo': 'recetas_opticas.editar', 'nombre': 'Editar receta óptica',   'modulo': 'recetas_opticas'},
+
     # Antecedentes
     {'codigo': 'antecedentes.listar',   'nombre': 'Listar antecedentes',   'modulo': 'antecedentes'},
     {'codigo': 'antecedentes.crear',    'nombre': 'Crear antecedente',      'modulo': 'antecedentes'},

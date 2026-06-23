@@ -239,7 +239,7 @@ function CreateCitaModal({
 }
 
 export default function CitasPage() {
-  const { me, permissionCodes } = useDashboardUser();
+  const { me, permissionCodes, loading: userLoading } = useDashboardUser();
   const [pacientes, setPacientes] = useState<PacienteRow[]>([]);
   const [especialistas, setEspecialistas] = useState<EspecialistaRow[]>([]);
   const [rows, setRows] = useState<CitaRow[]>([]);
@@ -375,6 +375,10 @@ export default function CitasPage() {
   }, [isCreateOpen]);
 
   const load = useCallback(async () => {
+    if (userLoading) {
+      setLoading(true);
+      return;
+    }
     if (!canViewCitas) {
       setPacientes([]);
       setEspecialistas([]);
@@ -416,7 +420,7 @@ export default function CitasPage() {
     } catch (error) {
       setErr(apiErr(error));
     } finally { setLoading(false); }
-  }, [canViewCitas, canCreateCitas]);
+  }, [canViewCitas, canCreateCitas, userLoading]);
 
   useEffect(() => { load(); }, [load]);
 
@@ -494,13 +498,13 @@ export default function CitasPage() {
       <div className={styles.hero}>Las validaciones de disponibilidad y solapamiento viven en backend.</div>
       {err && <div className={styles.err}>{err}</div>}
       {ok && <div className={styles.ok}>{ok}</div>}
-      {!canManageCitas && <div className={styles.err}>Tu rol es de solo lectura en Citas. Puedes consultar agenda y estados, pero no programar ni modificar citas.</div>}
-      {canManageCitas && (!canCreateCitas || !canReprogramCitas || !canCancelCitas) && (
+      {!userLoading && !canManageCitas && <div className={styles.err}>Tu rol es de solo lectura en Citas. Puedes consultar agenda y estados, pero no programar ni modificar citas.</div>}
+      {!userLoading && canManageCitas && (!canCreateCitas || !canReprogramCitas || !canCancelCitas) && (
         <div className={styles.muted}>Permisos activos en Citas: {canCreateCitas ? 'crear ' : ''}{canReprogramCitas ? 'reprogramar ' : ''}{canCancelCitas ? 'cancelar' : ''}</div>
       )}
 
       <div className={styles.actions} style={{ marginBottom: '1rem' }}>
-        <button type="button" className={styles.btnPrimary} onClick={() => { setIsCreateOpen(true); }} disabled={loading || !canCreateCitas}>Programar cita</button>
+        <button type="button" className={styles.btnPrimary} onClick={() => { setIsCreateOpen(true); }} disabled={userLoading || loading || !canCreateCitas}>Programar cita</button>
       </div>
 
       {isCreateOpen && (

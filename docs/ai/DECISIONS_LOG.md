@@ -10,6 +10,20 @@ Este archivo documenta todas las decisiones técnicas arquitectónicas important
 
 ---
 
+### Registro 67
+
+**Fecha:** 2026-06-22
+**Decisión:** Mantener `ConsultaMedica 1 -> 0..1 RecetaOptica`, pero permitir corregir la receta existente mediante `PUT/PATCH`, incluso cambiando entre anteojos, contacto o ambos; conservar inmutables consulta, historial, emisor y fecha, y mantener `DELETE` deshabilitado.
+**Motivo:** El especialista puede cometer un error de captura o el paciente puede elegir otro tipo de lente durante la misma consulta. Eso es una corrección del mismo documento, no una nueva emisión. Una prescripción posterior por cambio clínico continúa requiriendo reconsulta y nuevo examen de refracción.
+**Impacto:** API nested con `PUT/PATCH`, reemplazo transaccional y bloqueado de detalles, auditoría `EDITAR`, permiso `recetas_opticas.editar`, pruebas de regresión y modo de edición en Next.js. Esta decisión reemplaza solamente la inmutabilidad total definida en el Registro 66; conserva la unicidad por consulta y el historial por reconsulta.
+
+### Registro 66
+
+**Fecha:** 2026-06-21
+**Decisión:** Implementar CU17 con una receta óptica inmutable por consulta (`ConsultaMedica 1 -> 0..1 RecetaOptica`) y detalles normalizados por tipo de corrección y ojo; permitir emisión solo al `ESPECIALISTA` asignado o a `ADMIN`.
+**Motivo:** Una consulta puede no producir receta, pero no debe producir dos documentos ópticos contradictorios. Cuando la graduación cambia, una reconsulta crea una consulta y receta nuevas, preservando la evolución clínica. Anteojos y contacto comparten potencia óptica, pero requieren datos de adaptación diferentes.
+**Impacto:** Nueva app `apps.GestionClinica.recetas_opticas`, dos tablas, migración inicial, API nested inmutable, servicio atómico, bitácora, permisos `recetas_opticas.listar/crear`, constraints por tipo y suite de pruebas escrita. Pendiente validación runtime y sincronización final del frontend.
+
 ### Registro 65
 
 **Fecha:** 2026-06-20
